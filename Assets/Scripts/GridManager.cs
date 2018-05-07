@@ -17,6 +17,16 @@ public struct Cell
     {
         return GridManager.GetEntitiesInCell(this);
     }
+
+    public static bool operator==(Cell A, Cell B)
+    {
+        return A.x == B.x && A.y == B.y;
+    }
+
+    public static bool operator!=(Cell A, Cell B)
+    {
+        return A.x != B.x || A.y != B.y;
+    }
 }
 
 [CreateAssetMenu(fileName = "Grid Config", menuName = "Grid/GridConfig", order = 1)]
@@ -79,6 +89,16 @@ public class GridManager : MonoBehaviour
         entity.SetParent(m_instance.entities[cell], true);
     }
 
+    public static T GetEntityAt<T>(Cell cell)
+    {
+        return m_instance.entities[cell].GetComponentInChildren<T>();
+    }
+
+    public static T[] GetEntitiesAt<T>(Cell cell)
+    {
+        return m_instance.entities[cell].GetComponentsInChildren<T>();
+    }
+
     public static Transform GetEntitiesInCell(Cell cell)
     {
         if (m_instance.entities.ContainsKey(cell))
@@ -89,5 +109,12 @@ public class GridManager : MonoBehaviour
     public static Transform InstantiateTileMap(Transform tilemapPrefab)
     {
         return Instantiate<Transform>(tilemapPrefab, m_instance.transform);
+    }
+
+    public static Cell GetMouseCell()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 target = ray.origin;
+        return GridManager.GetCellAt(target);
     }
 };

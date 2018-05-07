@@ -14,9 +14,7 @@ public class GridTest : MonoBehaviour
 	
 	void Update ()
     {
-        Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-        Vector2 target = ray.origin;
-        Cell targetCell = GridManager.GetCellAt(target);
+        Cell targetCell = GridManager.GetMouseCell();
         Vector2 targetCellCenter = GridManager.GetCellPos(targetCell);
         if (cursor != null)
         {

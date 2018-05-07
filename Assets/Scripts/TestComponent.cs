@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestComponent : MonoBehaviour {
+public class TestComponent : MonoBehaviour
+{
     
-	void Start () {
+	void Start ()
+    {
 		
 	}
 	
