@@ -13,6 +13,11 @@ public struct Cell
         this.y = y;
     }
 
+    public static Cell right = new Cell(1, 0);
+    public static Cell left = new Cell(-1, 0);
+    public static Cell down = new Cell(0, -1);
+    public static Cell up = new Cell(0, 1);
+
     public Transform GetEntities()
     {
         return GridManager.GetEntitiesInCell(this);
@@ -26,6 +31,16 @@ public struct Cell
     public static bool operator!=(Cell A, Cell B)
     {
         return A.x != B.x || A.y != B.y;
+    }
+
+    public static Cell operator +(Cell A, Cell B)
+    {
+        return new Cell(A.x + B.x, A.y + B.y);
+    }
+
+    public static Cell operator -(Cell A, Cell B)
+    {
+        return new Cell(A.x - B.x, A.y - B.y);
     }
 }
 
