@@ -20,8 +20,6 @@ public class GridLoader : MonoBehaviour
             for(int j=0; j<data.h; j++)
             {
                 TileBase tile = data.GetTileAt(new Cell(i, j));
-                Debug.Log(i + " " + j + " : " + tile);
-
                 tileMap.SetTile(new Vector3Int(i, j, 0), tile);
             }
         }
@@ -54,4 +52,10 @@ public class GridData : ScriptableObject
             return tiles[cell.x + cell.y * w];
         return null;
     }
+}
+
+[CreateAssetMenu(fileName = "Game Tile", menuName = "Grid/Tile", order = 1)]
+public class GameTile : Tile
+{
+    public int collisionType = 0;
 }

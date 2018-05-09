@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Pathfind : MonoBehaviour
 {
@@ -41,9 +42,9 @@ public class Pathfind : MonoBehaviour
         public CellData(Cell inCell, int inLength) { cell = inCell; length = inLength; }
     }
 
-    public static DataGrid<CellData> Dijkstra(Cell A, DataGrid<bool> availability, int maxLength = int.MaxValue)
+    public static DataGrid<CellData> Dijkstra(Cell A, Tilemap collisionMap, int maxLength = 50)
     {
-        DataGrid<CellData> result = new DataGrid<CellData>(availability.Min, availability.Max);
+        DataGrid<CellData> result = new DataGrid<CellData>(A - new Cell(maxLength, maxLength), A + new Cell(maxLength, maxLength));
         Queue<CellData> nextCells = new Queue<CellData>();
 
         nextCells.Enqueue(new CellData(A, 0));
@@ -59,7 +60,8 @@ public class Pathfind : MonoBehaviour
                 foreach(Cell direction in directions)
                 {
                     Cell cellToTest = cellData.cell + direction;
-                    if (result.IsInbound(cellToTest) && availability[cellToTest])
+                    GameTile tile = collisionMap.GetTile<GameTile>(new Vector3Int(cellToTest.x, cellToTest.y, 0));
+                    if (result.IsInbound(cellToTest) && tile == null || tile.collisionType == 0)
                     {
                         if (result[cellToTest] == null || result[cellToTest].length > cellData.length + 1)
                         {

@@ -12,6 +12,7 @@ public class PlanningController : MonoBehaviour
     private Cell startCell, targetCell;
 
     private Tilemap tilemap;
+    public Tilemap collisionTilemap;
 
     void Start()
     {
@@ -25,7 +26,7 @@ public class PlanningController : MonoBehaviour
             startCell = GridManager.GetMouseCell();
             tilemap.ClearAllTiles();
         }
-        if (Input.GetButtonUp("Fire1") && targetCell != GridManager.GetMouseCell())
+        if (Input.GetButtonUp("Fire1"))
         {
             targetCell = GridManager.GetMouseCell();
             BuildPath();
@@ -35,36 +36,20 @@ public class PlanningController : MonoBehaviour
     void BuildPath()
     {
         tilemap.ClearAllTiles();
-        Cell min = new Cell(int.MaxValue, int.MaxValue), max = new Cell(-int.MaxValue, -int.MaxValue);
-        min.x = ((startCell.x < targetCell.x) ? startCell.x : targetCell.x);
-        min.y = ((startCell.y < targetCell.y) ? startCell.y : targetCell.y);
-        max.x = ((startCell.x > targetCell.x) ? startCell.x : targetCell.x);
-        max.y = ((startCell.y > targetCell.y) ? startCell.y : targetCell.y);
-
-        DataGrid<bool> availability = new DataGrid<bool>(min, max);
-        for (int i = min.x; i <= max.x; i++)
-        {
-            for (int j = min.y; j <= max.y; j++)
-            {
-                availability[new Cell(i, j)] = true;
-            }
-            availability[new Cell(0, 0)] = false;
-
-        }
-        /*for (int i = 0; i < path.Count; i++)
-        {
-            if (path[i].x < min.x)
-                min.x = path[i].x;
-            if (path[i].y < min.y)
-                min.y = path[i].y;
-            if (path[i].x > max.x)
-                max.x = path[i].x;
-            if (path[i].y > max.y)
-                max.y = path[i].y;
-        }*/
-        DataGrid<Pathfind.CellData> dijkstra = Pathfind.Dijkstra(startCell, availability);
+        DataGrid<Pathfind.CellData> dijkstra = Pathfind.Dijkstra(startCell, collisionTilemap);
         List<Cell> path = Pathfind.GetPathFromDijkstra(dijkstra, startCell, targetCell);
-        Cell size = new Cell(max.x - min.x, max.y - min.y);
+        Cell min = new Cell(int.MaxValue, int.MaxValue), max = new Cell(-int.MaxValue, -int.MaxValue);
+        foreach (Cell cell in path)
+        {
+            if(min.x > cell.x)
+                min.x = cell.x;
+            if (min.y > cell.y)
+                min.y = cell.y;
+            if (max.x < cell.x)
+                max.x = cell.x;
+            if (max.y < cell.y)
+                max.y = cell.y;
+        }
         DataGrid<int> grid = new DataGrid<int>(min, max);
 
         foreach (Cell cell in path)
