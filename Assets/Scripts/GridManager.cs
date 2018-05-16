@@ -106,7 +106,9 @@ public class GridManager : MonoBehaviour
 
     public static T GetEntityAt<T>(Cell cell)
     {
-        return m_instance.entities[cell].GetComponentInChildren<T>();
+        if(m_instance.entities.ContainsKey(cell))
+            return m_instance.entities[cell].GetComponentInChildren<T>();
+        return default(T);
     }
 
     public static T[] GetEntitiesAt<T>(Cell cell)

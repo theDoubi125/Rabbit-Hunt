@@ -3,45 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(Tilemap))]
-public class PlanningController : MonoBehaviour
+public class PathDrawer : MonoBehaviour
 {
     public List<Tile> Tiles;
 
     private bool selection = false;
     private Cell startCell, targetCell;
 
-    private Tilemap tilemap;
+    private Tilemap m_tilemap;
+    private Tilemap tilemap
+    {
+        get
+        {
+            if (m_tilemap == null)
+                m_tilemap = GetComponentInChildren<Tilemap>();
+            return m_tilemap;
+        }
+    }
     public Tilemap collisionTilemap;
 
     void Start()
     {
-        tilemap = GetComponent<Tilemap>();
-    }
-	
-	void Update ()
-    {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            startCell = GridManager.GetMouseCell();
-            tilemap.ClearAllTiles();
-        }
-        if (Input.GetButtonUp("Fire1"))
-        {
-            targetCell = GridManager.GetMouseCell();
-            BuildPath();
-        }
-	}
 
-    void BuildPath()
+    }
+
+    public void ClearPath()
+    {
+        tilemap.ClearAllTiles();
+    }
+
+    public void DrawPath(List<Cell> path)
     {
         tilemap.ClearAllTiles();
         DataGrid<Pathfind.CellData> dijkstra = Pathfind.Dijkstra(startCell, collisionTilemap);
-        List<Cell> path = Pathfind.GetPathFromDijkstra(dijkstra, startCell, targetCell);
         Cell min = new Cell(int.MaxValue, int.MaxValue), max = new Cell(-int.MaxValue, -int.MaxValue);
         foreach (Cell cell in path)
         {
-            if(min.x > cell.x)
+            if (min.x > cell.x)
                 min.x = cell.x;
             if (min.y > cell.y)
                 min.y = cell.y;
