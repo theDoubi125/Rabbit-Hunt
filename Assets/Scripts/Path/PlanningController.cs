@@ -17,6 +17,7 @@ public class PlanningController : MonoBehaviour
     private Transform startCursorInstance, endCursorInstance;
 
     Dictionary<Cell, PathDrawer> pathDrawers = new Dictionary<Cell, PathDrawer>();
+    Dictionary<Cell, List<Cell>> paths = new Dictionary<Cell, List<Cell>>();
     PathDrawer previewPathDrawer;
 
     private bool m_characterSelected;
@@ -32,9 +33,20 @@ public class PlanningController : MonoBehaviour
 
     private PathDrawer GetPathDrawer(Cell cell)
     {
-        if (!pathDrawers.ContainsKey(startCell))
+        if (!pathDrawers.ContainsKey(cell))
+            pathDrawers.Add(cell, PathManager.CreatePathDrawer());
+        return pathDrawers[cell];
+    }
+
+    private void SetPathForCell(Cell cell, List<Cell> path)
+    {
+        if (!pathDrawers.ContainsKey(cell))
             pathDrawers.Add(startCell, PathManager.CreatePathDrawer());
-        return pathDrawers[startCell];
+        if (!paths.ContainsKey(cell))
+            paths.Add(cell, path);
+        
+        pathDrawers[cell].DrawPath(path);
+        paths[cell] = path;    
     }
 	
 	void Update ()
@@ -53,7 +65,7 @@ public class PlanningController : MonoBehaviour
             else
             {
                 List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
-                GetPathDrawer(startCell).DrawPath(path);
+                SetPathForCell(startCell, path);
             }
         }
         if(targetCell != GridManager.GetMouseCell())
@@ -64,9 +76,38 @@ public class PlanningController : MonoBehaviour
             List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
             previewPathDrawer.DrawPath(path);
         }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            LaunchSimulation();
+        }
     }
 
     void BuildPath()
     {
+    }
+
+    void LaunchSimulation()
+    {
+        foreach (Cell cell in paths.Keys)
+        {
+            CharacterSimulator character = GridManager.GetEntityAt<CharacterSimulator>(cell);
+            if (character != null)
+            {
+                character.StartSimulation(paths[cell]);
+            }
+        }
+        ClearAllPaths();
+    }
+
+    void ClearAllPaths()
+    {
+        foreach (Cell cell in pathDrawers.Keys)
+        {
+            pathDrawers[cell].ClearPath();
+            PathManager.ReleasePathDrawer(pathDrawers[cell]);
+        }
+
+        pathDrawers.Clear();
+        paths.Clear();
     }
 }
