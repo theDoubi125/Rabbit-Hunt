@@ -2,22 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Character))]
 public class CharacterSimulator : MonoBehaviour
 {
     private Cell startCell;
     private List<Cell> path = new List<Cell>();
     private float time = 0;
+    private Character character;
+
+    public delegate void CharacterSimulationFinishedDelegate(CharacterSimulator character);
+
+    public CharacterSimulationFinishedDelegate OnSimulationFinished;
+
+    private void Start()
+    {
+        character = GetComponent<Character>();
+    }
 
     public void StartSimulation(List<Cell> inPath)
     {
         startCell = GridManager.GetCellAt(transform.position);
-        path.Add(startCell);
         path.AddRange(inPath);
+        enabled = true;
     }
 
     void FixedUpdate()
     {
-        time += Time.fixedDeltaTime;
+        time += Time.fixedDeltaTime * (character != null ? character.velocity : 1);
         if (time > 1)
         {
             time -= 1;
@@ -28,6 +39,9 @@ public class CharacterSimulator : MonoBehaviour
             {
                 path.Clear();
                 GridManager.UpdateEntityCell(transform);
+                if(OnSimulationFinished != null)
+                    OnSimulationFinished(this);
+                enabled = false;
             }
         }
         if (path.Count >= 2)
