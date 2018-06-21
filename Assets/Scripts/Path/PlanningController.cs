@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Tilemap))]
 public class PlanningController : MonoBehaviour
@@ -49,36 +50,35 @@ public class PlanningController : MonoBehaviour
         paths[cell] = path;    
     }
 	
-	void Update ()
+	void Update()
     {
         Cell selectedCell = GridManager.GetMouseCell();
-        if (Input.GetButtonDown("Fire1"))
+        if(EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject())
         {
-            if (GridManager.GetEntityAt<Character>(selectedCell) != null)
+            if (Input.GetButtonDown("Fire1"))
             {
-                startCell = GridManager.GetMouseCell();
-                if (startCursorInstance != null)
-                    startCursorInstance.transform.position = GridManager.GetCellPos(startCell);
+                if (GridManager.GetEntityAt<Character>(selectedCell) != null)
+                {
+                    startCell = GridManager.GetMouseCell();
+                    if (startCursorInstance != null)
+                        startCursorInstance.transform.position = GridManager.GetCellPos(startCell);
 
-                previewPathDrawer.ClearPath();
+                    previewPathDrawer.ClearPath();
+                }
+                else
+                {
+                    List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
+                    SetPathForCell(startCell, path);
+                }
             }
-            else
+            if (targetCell != GridManager.GetMouseCell())
             {
+                targetCell = GridManager.GetMouseCell();
+                if (endCursorInstance != null)
+                    endCursorInstance.transform.position = GridManager.GetCellPos(targetCell);
                 List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
-                SetPathForCell(startCell, path);
+                previewPathDrawer.DrawPath(path);
             }
-        }
-        if(targetCell != GridManager.GetMouseCell())
-        {
-            targetCell = GridManager.GetMouseCell();
-            if (endCursorInstance != null)
-                endCursorInstance.transform.position = GridManager.GetCellPos(targetCell);
-            List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
-            previewPathDrawer.DrawPath(path);
-        }
-        if (Input.GetButtonDown("Fire2"))
-        {
-            LaunchSimulation();
         }
     }
 
@@ -86,17 +86,27 @@ public class PlanningController : MonoBehaviour
     {
     }
 
-    void LaunchSimulation()
+    public void LaunchSimulation()
     {
+        Simulation simulation = ScriptableObject.CreateInstance<Simulation>();
+        List<SimulationOrder> orders = new List<SimulationOrder>();
         foreach (Cell cell in paths.Keys)
         {
             CharacterSimulator character = GridManager.GetEntityAt<CharacterSimulator>(cell);
-            if (character != null)
-            {
-                character.StartSimulation(paths[cell]);
-            }
+            SimulationOrder order;
+            order.Character = character;
+            order.Path = paths[cell];
+            orders.Add(order);
         }
+        simulation.OnSimulationFinished += OnSimulationFinished;
+        simulation.LaunchSimulation(orders);
         ClearAllPaths();
+        enabled = false;
+    }
+
+    void OnSimulationFinished(Simulation simulation)
+    {
+        enabled = true;
     }
 
     void ClearAllPaths()
