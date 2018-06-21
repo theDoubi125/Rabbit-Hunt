@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="src\tools\imgui\imconfig.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\imgui.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\imgui_impl_sdl_gl3.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\imgui_internal.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\stb_rect_pack.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\stb_textedit.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\imgui\stb_truetype.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\input.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\name.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\level.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\geometry.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\character\character.h">
+      <Filter>src\common\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\util\packed_array.h">
+      <Filter>src\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\util\alloc_array.h">
+      <Filter>src\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_main.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_container.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\util\sorted_array.h">
+      <Filter>src\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_actions.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\character\action\dispatcher.h">
+      <Filter>src\common\character\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\util\buffer.h">
+      <Filter>src\common\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\character\action\scheduler.h">
+      <Filter>src\common\character\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\character\action\common.h">
+      <Filter>src\common\character\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_dispatcher.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_util.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\character\action\assignment_container.h">
+      <Filter>src\common\character\action</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\transforms\move.h">
+      <Filter>src\common\character\action\transforms</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_world.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\tools\imgui\imgui.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\imgui\imgui_demo.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\imgui\imgui_draw.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\imgui\imgui_impl_sdl_gl3.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\input.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\name.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\level.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\geometry.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\character\character.cpp">
+      <Filter>src\common\character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\util\packed_array.cpp">
+      <Filter>src\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\util\alloc_array.cpp">
+      <Filter>src\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_main.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_container.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\util\sorted_array.cpp">
+      <Filter>src\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_actions.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\character\action\dispatcher.cpp">
+      <Filter>src\common\character\action</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\util\buffer.cpp">
+      <Filter>src\common\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\character\action\scheduler.cpp">
+      <Filter>src\common\character\action</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_dispatcher.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_util.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\character\action\assignment_container.cpp">
+      <Filter>src\common\character\action</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\transforms\move.cpp">
+      <Filter>src\common\character\action\transforms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_world.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4e572b00-ff4f-4358-b2c9-46374ec045a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\imgui">
+      <UniqueIdentifier>{60a53c5e-cf17-4b0d-9cce-06b7055b8087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{3390f1d4-b634-46af-b512-06f3291f6486}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\character">
+      <UniqueIdentifier>{3475a90f-222a-41d7-b400-c8fc9cb6e8ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\util">
+      <UniqueIdentifier>{cd8b9159-e544-4b98-b02d-ee304618dde3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools">
+      <UniqueIdentifier>{fe67289b-b494-4b9a-8cf0-adc0ebe341e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tools\editor">
+      <UniqueIdentifier>{eb3d9844-65e2-4100-b110-8586f572b722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\character\action">
+      <UniqueIdentifier>{4ffe9115-6a0a-4c93-947e-d5088df03c79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\character\action\transforms">
+      <UniqueIdentifier>{c9071813-1aa5-4447-83e3-dee46e1e96f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
