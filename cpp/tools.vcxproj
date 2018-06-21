@@ -181,6 +181,8 @@
     <ClInclude Include="src\common\character\character.h" />
     <ClInclude Include="src\common\geometry.h" />
     <ClInclude Include="src\common\level.h" />
+    <ClInclude Include="src\common\memory\allocator.h" />
+    <ClInclude Include="src\common\path\path.h" />
     <ClInclude Include="src\common\util\buffer.h" />
     <ClInclude Include="src\common\util\packed_array.h" />
     <ClInclude Include="src\common\util\alloc_array.h" />
@@ -209,6 +211,8 @@
     <ClCompile Include="src\common\character\character.cpp" />
     <ClCompile Include="src\common\geometry.cpp" />
     <ClCompile Include="src\common\level.cpp" />
+    <ClCompile Include="src\common\memory\allocator.cpp" />
+    <ClCompile Include="src\common\path\path.cpp" />
     <ClCompile Include="src\common\util\buffer.cpp" />
     <ClCompile Include="src\common\util\packed_array.cpp" />
     <ClCompile Include="src\common\util\alloc_array.cpp" />

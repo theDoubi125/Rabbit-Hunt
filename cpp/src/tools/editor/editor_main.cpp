@@ -17,7 +17,7 @@ namespace editor
 	bool moveSelected = false;
 	bool dispatcherSelected = true;
 
-	void drawEditor()
+	void drawEditor(float deltaTime)
 	{
 		if (ImGui::BeginMainMenuBar())
 		{
@@ -64,7 +64,9 @@ namespace editor
 		}
 		if (dispatcherSelected)
 		{
-			dispatcher::drawDispatcherEditor();
+			dispatcher::drawDispatcherEditor(deltaTime);
 		}
+
+		container::drawMemoryAllocatorEditor();
 	}
 }

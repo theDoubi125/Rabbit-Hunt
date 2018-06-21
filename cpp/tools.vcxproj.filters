@@ -82,6 +82,12 @@
     <ClInclude Include="src\tools\editor\editor_world.h">
       <Filter>src\tools\editor</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\path\path.h">
+      <Filter>src\common\path</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\memory\allocator.h">
+      <Filter>src\common\memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tools\imgui\imgui.cpp">
@@ -156,6 +162,12 @@
     <ClCompile Include="src\tools\editor\editor_world.cpp">
       <Filter>src\tools\editor</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\path\path.cpp">
+      <Filter>src\common\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\memory\allocator.cpp">
+      <Filter>src\common\memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -184,6 +196,12 @@
     </Filter>
     <Filter Include="src\common\character\action\transforms">
       <UniqueIdentifier>{c9071813-1aa5-4447-83e3-dee46e1e96f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\path">
+      <UniqueIdentifier>{3a7389cf-ea4a-4ee1-8876-5e22cd758de9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\memory">
+      <UniqueIdentifier>{e98f8126-a4ba-41e0-89ce-bc632f135c25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

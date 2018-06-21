@@ -17,7 +17,7 @@ namespace editor
 {
 	namespace dispatcher
 	{
-		void drawDispatcherEditor()
+		void drawDispatcherEditor(float deltaTime)
 		{
 			static Dispatcher dispatcherInstance;
 			static Scheduler schedulerInstance;
@@ -30,6 +30,10 @@ namespace editor
 			static bool initialized = false;
 
 			static vec2 selectedPos;
+
+			static bool isPlaying = false;
+			static float autoPlayFps = 10;
+			static float playTime = 0;
 
 			if (!initialized)
 			{
@@ -135,6 +139,28 @@ namespace editor
 				idleManager.update();
 				movingManager.update();
 			}
+
+
+
+			Checkbox("Auto play", &isPlaying);
+			SliderFloat("Auto Play fps", &autoPlayFps, 1, 60, "%.1f");
+
+			if (isPlaying)
+			{
+				playTime += deltaTime;
+				if (playTime > 1.0f / autoPlayFps)
+				{
+					playTime -= 1.0f / autoPlayFps;
+
+					dispatcherInstance.update(schedulerInstance);
+					idleManager.handleInput();
+					movingManager.handleInput();
+					transform::move(movingManager, characterManager);
+					idleManager.update();
+					movingManager.update();
+				}
+			}
+
 			drawAssignmentEditor("Idle", idleManager);
 			drawAssignmentEditor("Moving", movingManager);
 

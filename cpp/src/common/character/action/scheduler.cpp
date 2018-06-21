@@ -4,6 +4,7 @@ namespace action
 {
 	extern std::string typeNames[50] =
 	{
+		"none",
 		"idle",
 		"moving",
 	};

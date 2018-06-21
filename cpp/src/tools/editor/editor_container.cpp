@@ -3,6 +3,8 @@
 #include "editor_main.h"
 #include "util/packed_array.h"
 #include "util/sorted_array.h"
+#include "memory/allocator.h"
+#include "util/buffer.h"
 
 #include <cstdio>
 #include <vector>
@@ -13,7 +15,7 @@ namespace editor
 {
 	namespace container
 	{
-		char buffer[100];
+		char buf[100];
 		using handle = parray<char, 100>::handle;
 		struct HandleValue
 		{
@@ -32,13 +34,13 @@ namespace editor
 			}
 
 			static char value = 'a';
-			sprintf_s(buffer, "%c", value);
-			if (BeginCombo("Value Combo", buffer))
+			sprintf_s(buf, "%c", value);
+			if (BeginCombo("Value Combo", buf))
 			{
 				for (int i = 0; i < 26; i++)
 				{
-					sprintf_s(buffer, "%c", 'a' + i);
-					if (Selectable(buffer, 'a' + i == value))
+					sprintf_s(buf, "%c", 'a' + i);
+					if (Selectable(buf, 'a' + i == value))
 					{
 						value = 'a' + i;
 					}
@@ -52,13 +54,13 @@ namespace editor
 			}
 
 			static handle selectedHandle;
-			sprintf_s(buffer, "%d", selectedHandle.id);
-			if (BeginCombo("To Remove Combo", buffer))
+			sprintf_s(buf, "%d", selectedHandle.id);
+			if (BeginCombo("To Remove Combo", buf))
 			{
 				for (int i = 0; i < values.size(); i++)
 				{
-					sprintf_s(buffer, "(%d, %c)", values[i].arrayHandle.id, values[i].value);
-					if (Selectable(buffer, selectedHandle == values[i].arrayHandle))
+					sprintf_s(buf, "(%d, %c)", values[i].arrayHandle.id, values[i].value);
+					if (Selectable(buf, selectedHandle == values[i].arrayHandle))
 					{
 						selectedHandle = values[i].arrayHandle;
 					}
@@ -93,13 +95,13 @@ namespace editor
 			}
 
 			static char value = 'a';
-			sprintf_s(buffer, "%c", value);
-			if (BeginCombo("Value Combo", buffer))
+			sprintf_s(buf, "%c", value);
+			if (BeginCombo("Value Combo", buf))
 			{
 				for (int i = 0; i < 26; i++)
 				{
-					sprintf_s(buffer, "%c", 'a' + i);
-					if (Selectable(buffer, 'a' + i == value))
+					sprintf_s(buf, "%c", 'a' + i);
+					if (Selectable(buf, 'a' + i == value))
 					{
 						value = 'a' + i;
 					}
@@ -112,6 +114,14 @@ namespace editor
 			}
 
 			End();
+		}
+
+		void drawMemoryAllocatorEditor()
+		{
+			memory::allocator allocator(1000000);
+			buffer<int> test = allocator.allocateBuffer<int>(200);
+			buffer<int> test2 = allocator.allocateBuffer<int>(200);
+			size_t diff = (char*)test2.getData() - (char*)test.getData();
 		}
 	}
 }

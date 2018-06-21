@@ -4,6 +4,6 @@ namespace editor
 {
 	namespace dispatcher
 	{
-		void drawDispatcherEditor();
+		void drawDispatcherEditor(float deltaTime);
 	}
 }

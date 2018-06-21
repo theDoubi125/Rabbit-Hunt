@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 
 		renderFrame(window);
 
-		editor::drawEditor();
+		editor::drawEditor(deltaTime);
 
 		int display_w = 800, display_h = 600;
 		glViewport(screenSize.x, screenSize.y, screenSize.w, screenSize.h);

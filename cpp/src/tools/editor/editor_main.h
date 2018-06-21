@@ -2,7 +2,7 @@
 
 namespace editor
 {
-	void drawEditor();
+	void drawEditor(float deltaTime);
 
 	extern bool demoWindowSelected;
 	extern bool pArraySelected;
