@@ -115,13 +115,5 @@ namespace editor
 
 			End();
 		}
-
-		void drawMemoryAllocatorEditor()
-		{
-			memory::allocator allocator(1000000);
-			buffer<int> test = allocator.allocateBuffer<int>(200);
-			buffer<int> test2 = allocator.allocateBuffer<int>(200);
-			size_t diff = (char*)test2.getData() - (char*)test.getData();
-		}
 	}
 }

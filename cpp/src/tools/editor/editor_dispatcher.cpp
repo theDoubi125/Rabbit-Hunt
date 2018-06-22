@@ -5,6 +5,7 @@
 #include "editor_util.h"
 #include "transforms/move.h"
 #include "editor_world.h"
+#include "memory/allocator.h"
 
 using namespace ImGui;
 
@@ -19,8 +20,9 @@ namespace editor
 	{
 		void drawDispatcherEditor(float deltaTime)
 		{
+			static memory::allocator allocator(1000000);
 			static Dispatcher dispatcherInstance;
-			static Scheduler schedulerInstance;
+			static Scheduler schedulerInstance(allocator, 100);
 			static character::manager characterManager;
 			static assignmentContainer idleManager;
 			static assignmentContainer movingManager;

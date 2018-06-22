@@ -4,6 +4,7 @@
 #include "common.h"
 #include "util/buffer.h"
 #include "dispatcher.h"
+#include "memory/allocator.h"
 
 #define MAX_ACTION_COUNT 50
 
@@ -15,12 +16,14 @@ namespace action
 		class manager
 		{
 		public:
+			manager(memory::allocator& allocator, int size);
 			void addAction(character::handle character, actionData action);
 
 			void dequeueNextAction(const character::handle* characters, actionData* outActions, int count);
 
 		public:
-			queue<actionData, MAX_ACTION_COUNT> m_actionQueues[MAX_CHARACTER_COUNT];
+			queue<actionData>* m_actionQueues;
+			int m_actionQueuesCount;
 		};
 	}
 }

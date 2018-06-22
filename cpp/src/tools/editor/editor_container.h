@@ -6,6 +6,5 @@ namespace editor
 	{
 		void drawPackedArrayEditor();
 		void drawAllocArrayEditor();
-		void drawMemoryAllocatorEditor();
 	}
 }

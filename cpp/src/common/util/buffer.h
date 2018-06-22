@@ -41,7 +41,6 @@ public:
 		m_cursor = 0;
 	}
 
-private:
 	T* m_data;
 	int* m_cursor;
 	int m_size;
@@ -83,44 +82,50 @@ private:
 	int m_cursor = 0;
 };
 
-template<typename T, int SIZE>
+template<typename T>
 class queue
 {
 public:
+	queue(T* data, int size) : m_data(data), m_size(size)
+	{
+
+	}
+
 	void enqueue(const T& data)
 	{
 		m_data[m_lastCursor] = data;
-		m_lastCursor = (m_lastCursor+1)% SIZE;
+		m_lastCursor = (m_lastCursor+1) % m_size;
 	}
 
 	void dequeueTo(T& outData)
 	{
 		outData = m_data[m_firstCursor];
-		m_firstCursor = (m_firstCursor + 1) % SIZE;
+		m_firstCursor = (m_firstCursor + 1) % m_size;
 	}
 
 	T dequeue()
 	{
 		T result = m_data[m_firstCursor];
-		m_firstCursor = (m_firstCursor + 1) % SIZE;
+		m_firstCursor = (m_firstCursor + 1) % m_size;
 		return result;
 	}
 
 	int size() const
 	{
-		return (m_lastCursor - m_firstCursor + SIZE) % SIZE;
+		return (m_lastCursor - m_firstCursor + m_size) % m_size;
 	}
 
 	void getData(T* outData, int bufferSize) const
 	{
 		for (int i = 0; i < size() && i < bufferSize; i++)
 		{
-			outData[i] = m_data[(m_firstCursor + i) % SIZE];
+			outData[i] = m_data[(m_firstCursor + i) % m_size];
 		}
 	}
 
 private:
-	T m_data[SIZE];
+	T* m_data;
 	int m_firstCursor = 0;
 	int m_lastCursor = 0;
+	int m_size;
 };

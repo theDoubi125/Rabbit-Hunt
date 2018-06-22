@@ -66,7 +66,5 @@ namespace editor
 		{
 			dispatcher::drawDispatcherEditor(deltaTime);
 		}
-
-		container::drawMemoryAllocatorEditor();
 	}
 }
