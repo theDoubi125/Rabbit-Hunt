@@ -88,6 +88,9 @@
     <ClInclude Include="src\common\memory\allocator.h">
       <Filter>src\common\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\path\dijkstra.h">
+      <Filter>src\common\path</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tools\imgui\imgui.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="src\common\memory\allocator.cpp">
       <Filter>src\common\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\path\dijkstra.cpp">
+      <Filter>src\common\path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
