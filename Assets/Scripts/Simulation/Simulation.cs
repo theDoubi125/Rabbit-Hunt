@@ -19,9 +19,12 @@ class Simulation : ScriptableObject
     {
         foreach(SimulationOrder order in orders)
         {
-            simulatedEntities.Add(order.Character);
-            order.Character.OnSimulationFinished += OnCharacterSimulationFinished;
-            order.Character.StartSimulation(order.Path);
+            if(order.Character != null)
+            {
+                simulatedEntities.Add(order.Character);
+                order.Character.OnSimulationFinished += OnCharacterSimulationFinished;
+                order.Character.StartSimulation(order.Path);
+            }
         }
     }
 
@@ -34,5 +37,15 @@ class Simulation : ScriptableObject
             Destroy(this);
             OnSimulationFinished(this);
         }
+    }
+
+    List<CharacterSimulator> GetEntitiesAtRange(Vector2 position, float range)
+    {
+        List<CharacterSimulator> result = new List<CharacterSimulator>();
+        foreach(CharacterSimulator character in simulatedEntities)
+        {
+            
+        }
+        return result;
     }
 }

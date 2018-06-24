@@ -12,8 +12,27 @@ struct irect
 
 struct ivec2
 {
+	ivec2(){}
+	ivec2(int X, int Y) : x(X), y(Y) {}
+
 	int x, y;
+
 };
+
+inline ivec2 operator+(ivec2 A, ivec2 B)
+{
+	return ivec2(A.x + B.x, A.y + B.y);
+}
+
+inline ivec2 operator-(ivec2 A, ivec2 B)
+{
+	return ivec2(A.x - B.x, A.y - B.y);
+}
+
+inline ivec2 operator*(ivec2 A, int f)
+{
+	return ivec2(A.x * f, A.y * f);
+}
 
 struct vec2
 {

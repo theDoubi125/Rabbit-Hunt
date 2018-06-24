@@ -13,8 +13,9 @@ namespace action
 	{
 		manager::manager(memory::allocator& allocator, int queuesCount) : m_actionQueuesCount(queuesCount)
 		{
-			m_actionQueues = allocator.allocateQueues<actionData>(MAX_CHARACTER_COUNT, queuesCount);
+			allocator.allocateQueues<actionData>(m_actionQueues, MAX_CHARACTER_COUNT, queuesCount);
 		}
+
 		void manager::addAction(character::handle character, actionData action)
 		{
 			m_actionQueues[character.id].enqueue(action);

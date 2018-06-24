@@ -24,6 +24,7 @@ namespace memory
 		{
 			T* result = (T*)(m_data + m_cursor);
 			m_cursor += sizeof(T) * count;
+			return result;
 		}
 
 		bool pushStack()
@@ -68,10 +69,11 @@ namespace memory
 			for (int i = 0; i < queueSize; i++)
 			{
 				outQueues[i].m_data = data + i * queueSize;
-				//TODO : working allocation
+				outQueues[i].m_size = queueSize;
+				outQueues[i].m_firstCursor = 0;
+				outQueues[i].m_lastCursor = 0;
 			}
 			m_cursor += sizeof(T) * queueSize * queueCount;
-			return result;
 		}
 
 	private:

@@ -91,6 +91,11 @@ public:
 
 	}
 
+	queue() : m_data(nullptr), m_size(0)
+	{
+
+	}
+
 	void enqueue(const T& data)
 	{
 		m_data[m_lastCursor] = data;
@@ -123,9 +128,37 @@ public:
 		}
 	}
 
-private:
 	T* m_data;
 	int m_firstCursor = 0;
 	int m_lastCursor = 0;
 	int m_size;
+
+	class iterator
+	{
+	public:
+		iterator(queue<T>& target) : m_target(target) {}
+		T* value() const { return m_target.m_data[(m_target.m_firstCursor + m_pos) % m_target.m_size]; }
+		void operator++() { m_pos++; }
+		bool endReached() const { return ((m_target.m_firstCursor + m_pos) % m_target.m_size) == m_target.m_lastCursor; }
+
+	private:
+		int m_pos = 0;
+		queue<T>& m_target;
+	};
+
+	class const_iterator
+	{
+	public:
+		const_iterator(const queue<T>& target) : m_target(target) {}
+		const T& value() const { return m_target.m_data[(m_target.m_firstCursor + m_pos) % m_target.m_size]; }
+		const_iterator operator++(int x) { m_pos++; return *this; }
+		bool endReached() const { return ((m_target.m_firstCursor + m_pos) % m_target.m_size) == m_target.m_lastCursor; }
+
+	private:
+		int m_pos = 0;
+		const queue<T>& m_target;
+	};
+
+	iterator getIterator() { return iterator(*this); }
+	const_iterator getIterator() const { return const_iterator(*this); }
 };

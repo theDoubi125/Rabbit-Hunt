@@ -22,7 +22,7 @@ namespace action
 			void dequeueNextAction(const character::handle* characters, actionData* outActions, int count);
 
 		public:
-			queue<actionData>* m_actionQueues;
+			queue<actionData> m_actionQueues[MAX_CHARACTER_COUNT];
 			int m_actionQueuesCount;
 		};
 	}

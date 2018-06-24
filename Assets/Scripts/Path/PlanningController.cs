@@ -65,13 +65,13 @@ public class PlanningController : MonoBehaviour
 
                     previewPathDrawer.ClearPath();
                 }
-                else
+                else if(GridManager.GetEntityAt<Character>(startCell) != null)
                 {
                     List<Cell> path = Pathfind.GetPathFromDijkstra(Pathfind.Dijkstra(startCell, collisionTilemap), startCell, targetCell);
                     SetPathForCell(startCell, path);
                 }
             }
-            if (targetCell != GridManager.GetMouseCell())
+            if (GridManager.GetEntityAt<Character>(startCell) != null && targetCell != GridManager.GetMouseCell())
             {
                 targetCell = GridManager.GetMouseCell();
                 if (endCursorInstance != null)
