@@ -192,6 +192,7 @@
     <ClInclude Include="src\tools\editor\editor_container.h" />
     <ClInclude Include="src\tools\editor\editor_dispatcher.h" />
     <ClInclude Include="src\tools\editor\editor_main.h" />
+    <ClInclude Include="src\tools\editor\editor_pathfind.h" />
     <ClInclude Include="src\tools\editor\editor_util.h" />
     <ClInclude Include="src\tools\editor\editor_world.h" />
     <ClInclude Include="src\tools\editor\transforms\move.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="src\tools\editor\editor_container.cpp" />
     <ClCompile Include="src\tools\editor\editor_dispatcher.cpp" />
     <ClCompile Include="src\tools\editor\editor_main.cpp" />
+    <ClCompile Include="src\tools\editor\editor_pathfind.cpp" />
     <ClCompile Include="src\tools\editor\editor_util.cpp" />
     <ClCompile Include="src\tools\editor\editor_world.cpp" />
     <ClCompile Include="src\tools\editor\transforms\move.cpp" />

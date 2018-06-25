@@ -57,7 +57,7 @@ namespace memory
 		queue<T> allocateQueue(int size)
 		{
 			T* data = (T*)(m_data + m_cursor);
-			queue<T> result(data, cursor, size);
+			queue<T> result(data, size);
 			m_cursor += sizeof(T) * size;
 			return result;
 		}

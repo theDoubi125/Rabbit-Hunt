@@ -61,13 +61,6 @@ namespace editor
 			characterManager.getHandles(handles, MAX_CHARACTER_COUNT);
 			vec2 positions[MAX_CHARACTER_COUNT];
 			characterManager.get(handles, positions, characterManager.count());
-
-			Begin("Characters Window");
-			for (int i = 0; i < characterManager.count(); i++)
-			{
-				Text("Character %d : (%f, %f)", handles[i].id, positions[i].x, positions[i].y);
-			}
-			End();
 			if (BeginCombo("Character Selector", charBuffer))
 			{
 				
@@ -169,6 +162,13 @@ namespace editor
 			world::drawWorld(characterManager);
 
 			PopID();
+			End();
+
+			Begin("Characters Window");
+			for (int i = 0; i < characterManager.count(); i++)
+			{
+				Text("Character %d : (%f, %f)", handles[i].id, positions[i].x, positions[i].y);
+			}
 			End();
 		}
 	}

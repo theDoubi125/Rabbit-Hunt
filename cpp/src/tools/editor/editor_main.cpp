@@ -3,6 +3,7 @@
 #include "editor_container.h"
 #include "editor_actions.h"
 #include "editor_dispatcher.h"
+#include "editor_pathfind.h"
 #include "character/action/assignment_container.h"
 
 namespace editor
@@ -15,7 +16,8 @@ namespace editor
 	bool idleSelected = false;
 	bool demoWindowSelected = false;
 	bool moveSelected = false;
-	bool dispatcherSelected = true;
+	bool dispatcherSelected = false;
+	bool pathfindSelected = true;
 
 	void drawEditor(float deltaTime)
 	{
@@ -37,6 +39,11 @@ namespace editor
 			if (ImGui::BeginMenu("Demo"))
 			{
 				ImGui::MenuItem("Show Demo Window", NULL, &demoWindowSelected);
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Pathfind"))
+			{
+				ImGui::MenuItem("Dijkstra", NULL, &pathfindSelected);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMainMenuBar();
@@ -65,6 +72,10 @@ namespace editor
 		if (dispatcherSelected)
 		{
 			dispatcher::drawDispatcherEditor(deltaTime);
+		}
+		if (pathfindSelected)
+		{
+			pathfind::drawDijkstraEditor();
 		}
 	}
 }

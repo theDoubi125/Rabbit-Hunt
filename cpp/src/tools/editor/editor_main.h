@@ -11,4 +11,5 @@ namespace editor
 	extern bool idleSelected;
 	extern bool moveSelected;
 	extern bool dispatcherSelected;
+	extern bool pathfindSelected;
 }		   

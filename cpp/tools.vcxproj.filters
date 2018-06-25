@@ -91,6 +91,9 @@
     <ClInclude Include="src\common\path\dijkstra.h">
       <Filter>src\common\path</Filter>
     </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_pathfind.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tools\imgui\imgui.cpp">
@@ -173,6 +176,9 @@
     </ClCompile>
     <ClCompile Include="src\common\path\dijkstra.cpp">
       <Filter>src\common\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_pathfind.cpp">
+      <Filter>src\tools\editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
