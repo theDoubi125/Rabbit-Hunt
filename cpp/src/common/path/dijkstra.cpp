@@ -39,6 +39,7 @@ namespace path
 		dijkstraMap dijkstra(ivec2 origin, int distance, memory::allocator& allocator, const accessibilityMap& accessibility)
 		{
 			dijkstraMap result;
+			result.origin = origin;
 			result.min = origin - ivec2(distance, distance);
 			result.size = ivec2(distance * 2 + 1, distance * 2 + 1);
 			int cellCount = result.size.x * result.size.y;
@@ -71,7 +72,7 @@ namespace path
 					bool bIsInBound = nextPos[i].x >= result.min.x && nextPos[i].y >= result.min.y && nextPos[i].x < result.min.x + result.size.x && nextPos[i].y < result.min.y + result.size.y;
 					if (bIsInBound && accessibility.isAccessible(nextPos[i]) && result.distances[cellIndex] < 0 || result.distances[cellIndex] > data.dist + 1)
 					{
-						result.precedents[cellIndex] = nextPos[i];
+						result.precedents[cellIndex] = data.pos;
 						result.distances[cellIndex] = data.dist + 1;
 						toCompute.enqueue({ nextPos[i], data.dist + 1 });
 					}
@@ -79,6 +80,29 @@ namespace path
 			}
 			allocator.popStack();
 			return result;
+		}
+
+		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath, memory::allocator& allocator)
+		{
+			allocator.pushStack();
+			buffer<ivec2> reversedPath = allocator.allocateBuffer<ivec2>(outPath.steps.m_size);
+			reversedPath.add(target);
+			if (data.distances[data.posToIndex(target)] >= 0)
+			{
+				ivec2 cursorPos = target;
+				while (cursorPos != data.origin)
+				{
+					cursorPos = data.precedents[data.posToIndex(cursorPos)];
+					reversedPath.add(cursorPos);
+				}
+			}
+
+			ivec2 cursorPos = data.origin;
+			for (int i = reversedPath.size() - 1; i >= 0; i--)
+			{
+				outPath.steps.enqueue({ reversedPath.m_data[i] - cursorPos, action::direction::RIGHT });
+			}
+			allocator.popStack();
 		}
 	}
 }

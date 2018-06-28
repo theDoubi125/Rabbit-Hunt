@@ -15,21 +15,34 @@ struct ivec2
 	ivec2(){}
 	ivec2(int X, int Y) : x(X), y(Y) {}
 
+	int length() { return (int)sqrt(x * x + y * y); }
+	int max() { int xAbs = abs(x); int yAbs = abs(y); return xAbs > yAbs ? xAbs : yAbs; }
+
 	int x, y;
 
 };
 
-inline ivec2 operator+(ivec2 A, ivec2 B)
+inline bool operator==(const ivec2& A, const ivec2& B)
+{
+	return A.x == B.x && A.y == B.y;
+}
+
+inline bool operator!=(const ivec2& A, const ivec2& B)
+{
+	return A.x != B.x || A.y != B.y;
+}
+
+inline ivec2 operator+(const ivec2& A, const ivec2& B)
 {
 	return ivec2(A.x + B.x, A.y + B.y);
 }
 
-inline ivec2 operator-(ivec2 A, ivec2 B)
+inline ivec2 operator-(const ivec2& A, const ivec2& B)
 {
 	return ivec2(A.x - B.x, A.y - B.y);
 }
 
-inline ivec2 operator*(ivec2 A, int f)
+inline ivec2 operator*(const ivec2& A, int f)
 {
 	return ivec2(A.x * f, A.y * f);
 }

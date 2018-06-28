@@ -9,8 +9,8 @@ namespace path
 {
 	struct step
 	{
-		int distance;
-		action::direction direction;
+		ivec2 movement;
+		action::direction lookDirection;
 	};
 
 	struct path
@@ -32,6 +32,19 @@ namespace path
 		case action::direction::RIGHT:
 			return ivec2(1, 0);
 		}
+	}
+
+	inline action::direction getVectorDirection(const ivec2 direction)
+	{
+		if (direction.x != 0 && direction.y != 0)
+			return action::direction::UNDEFINED;
+		if (direction.x > 0)
+			return action::direction::RIGHT;
+		if (direction.x < 0)
+			return action::direction::LEFT;
+		if (direction.y > 0)
+			return action::direction::DOWN;
+		return action::direction::UP;
 	}
 
 	path* allocatePaths(memory::allocator& allocator, int pathsCount, int maxStepsCount);

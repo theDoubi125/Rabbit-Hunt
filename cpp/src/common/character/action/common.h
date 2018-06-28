@@ -20,7 +20,8 @@ namespace action
 		UP,
 		DOWN,
 		LEFT,
-		RIGHT
+		RIGHT,
+		UNDEFINED
 	};
 
 	extern std::string typeNames[50];

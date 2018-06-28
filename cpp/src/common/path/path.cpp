@@ -29,8 +29,7 @@ namespace path
 				if (paths[i].steps.size() > 0)
 				{
 					step currentStep = paths[i].steps.dequeue();
-					ivec2 direction = getDirectionVector(currentStep.direction);
-					paths[i].origin = paths[i].origin + direction * currentStep.distance;
+					paths[i].origin = paths[i].origin + currentStep.movement;
 				}
 			}
 		}
@@ -45,8 +44,9 @@ namespace path
 				step currentStep = it.value();
 				action::actionData nextAction;
 				nextAction.action = action::type::MOVING;
-				nextAction.direction = it.value().direction;
-				nextAction.duration = (int)((float)it.value().distance / velocity);
+				
+				nextAction.direction = getVectorDirection(currentStep.movement);
+				nextAction.duration = (int)(currentStep.movement.max()); // optim : max = length as x = 0 or y = 0
 				outActions->enqueue(nextAction);
 			}
 		}
