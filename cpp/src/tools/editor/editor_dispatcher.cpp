@@ -26,6 +26,7 @@ namespace editor
 			static character::manager characterManager;
 			static assignmentContainer idleManager;
 			static assignmentContainer movingManager;
+			static level::accessibilityMap map;
 			
 			static actionData selectedAction;
 			static Character selectedCharacter = { 0 };
@@ -43,7 +44,12 @@ namespace editor
 				movingManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				dispatcherInstance.bindHandler(type::IDLE, idleManager.input.getRef());
 				dispatcherInstance.bindHandler(type::MOVING, movingManager.input.getRef());
-				initialized = true;
+				initialized = true; 
+				map.min = ivec2(0, 0);
+				map.size = ivec2(11, 11);
+				map.data = allocator.allocate<unsigned int>(map.size.x * map.size.y);
+				map.setAllAccessible();
+				map.setAccessible(ivec2(3, 3), false);
 			}
 
 			Begin("Dispatcher Editor");
@@ -159,7 +165,7 @@ namespace editor
 			drawAssignmentEditor("Idle", idleManager);
 			drawAssignmentEditor("Moving", movingManager);
 
-			world::drawWorld(characterManager);
+			world::drawWorldEditor(characterManager, map);
 
 			PopID();
 			End();

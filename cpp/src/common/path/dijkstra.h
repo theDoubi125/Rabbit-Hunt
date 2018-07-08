@@ -4,6 +4,7 @@
 #include "memory/allocator.h"
 #include "util/buffer.h"
 #include "path.h"
+#include "level.h"
 
 namespace path
 {
@@ -23,17 +24,7 @@ namespace path
 			}
 		};
 
-		struct accessibilityMap
-		{
-			ivec2 min, size;
-			unsigned int *data;
-
-			bool isAccessible(const ivec2& cell) const;
-			void setAccessible(const ivec2& cell, bool accessible);
-			void setAllAccessible();
-		};
-
-		dijkstraMap dijkstra(ivec2 origin, int distance, memory::allocator& allocator, const accessibilityMap& accessibility);
+		dijkstraMap dijkstra(ivec2 origin, int distance, memory::allocator& allocator, const level::accessibilityMap& accessibility);
 		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath, memory::allocator& allocator);
 	}
 }

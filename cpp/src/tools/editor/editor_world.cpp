@@ -6,24 +6,47 @@ namespace editor
 {
 	namespace world
 	{
-		void drawWorld(const character::manager& characterManager)
+		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map)
 		{
 			static float zoom = 2;
 			static float radiuses = 10;
+			static int cellSize = 10;
 			static vec2 offset(radiuses, radiuses);
+
 			vec2 positions[MAX_CHARACTER_COUNT];
 			character::handle handles[MAX_CHARACTER_COUNT];
 			characterManager.getHandles(handles, MAX_CHARACTER_COUNT);
 			characterManager.get(handles, positions, characterManager.count());
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 1, 1));
-			ImGui::Begin("World", nullptr, ImGuiWindowFlags_NoTitleBar);
-			for (int i = 0; i < characterManager.count(); i++)
+			if (ImGui::Begin("World", nullptr, ImGuiWindowFlags_NoTitleBar))
 			{
-				ImVec2 pos(positions[i].x * zoom + ImGui::GetWindowPos().x + offset.x, positions[i].y * zoom + ImGui::GetWindowPos().y + offset.y);
-				ImGui::GetWindowDrawList()->AddCircle(pos, radiuses, 0xff000000);
+
+				ImDrawList* drawList = ImGui::GetWindowDrawList();
+				ImVec2 windowPos = ImGui::GetWindowPos();
+				for (int i = 0; i < map.size.x; i++)
+				{
+					for (int j = 0; j < map.size.y; j++)
+					{
+						ivec2 pos = (map.min + ivec2(i, j)) * cellSize;
+						ivec2 max = pos + ivec2(cellSize, cellSize);
+						ImVec2 A, B;
+						A.x = pos.x + windowPos.x;
+						B.x = max.x + windowPos.x;
+						A.y = pos.y + windowPos.y;
+						B.y = max.y + windowPos.y;
+						if(map.isAccessible(ivec2(i, j)))
+							drawList->AddRectFilled(A, B, 0xffff0000);
+						else drawList->AddRectFilled(A, B, 0xff00ff00);
+					}
+				}
+				for (int i = 0; i < characterManager.count(); i++)
+				{
+					ImVec2 pos(positions[i].x * zoom + windowPos.x + offset.x, positions[i].y * zoom + windowPos.y + offset.y);
+					drawList->AddCircle(pos, radiuses, 0xff000000);
+				}
+				ImGui::End();
 			}
-			ImGui::End();
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 		}

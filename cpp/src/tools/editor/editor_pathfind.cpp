@@ -68,7 +68,7 @@ namespace editor
 			static ivec2 startPos = ivec2(0, 0);
 			static ivec2 targetPos = ivec2(5, 5);
 			static int maxDist = 10;
-			static path::dijkstra::accessibilityMap accessibility;
+			static level::accessibilityMap accessibility;
 			static memory::allocator allocator(1000000);
 			static ivec2 target(3, 0);
 			const unsigned size = 5000;
