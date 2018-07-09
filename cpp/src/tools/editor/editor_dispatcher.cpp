@@ -58,7 +58,14 @@ namespace editor
 
 			char charBuffer[100];
 			sprintf_s(charBuffer, 100, "%d", selectedCharacter.id);
-			SliderFloat2("Position", (float*)&selectedPos, -100, 100);
+			int intPos[2];
+			intPos[0] = (int)selectedPos.x;
+			intPos[1] = (int)selectedPos.y;
+			if (ImGui::DragInt2("Position", intPos, 0.05f, -100, 100))
+			{
+				selectedPos.x = (float)intPos[0];
+				selectedPos.y = (float)intPos[1];
+			}
 			if (Button("Add Character"))
 			{
 				selectedCharacter = characterManager.add(selectedPos);

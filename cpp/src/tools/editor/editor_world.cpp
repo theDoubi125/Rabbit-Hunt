@@ -8,9 +8,8 @@ namespace editor
 	{
 		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map)
 		{
-			static float zoom = 2;
-			static float radiuses = 10;
-			static int cellSize = 10;
+			static int cellSize = 20;
+			static float radiuses = cellSize/2.0f;
 			static vec2 offset(radiuses, radiuses);
 
 			vec2 positions[MAX_CHARACTER_COUNT];
@@ -37,13 +36,13 @@ namespace editor
 						B.y = max.y + windowPos.y;
 						if(map.isAccessible(ivec2(i, j)))
 							drawList->AddRectFilled(A, B, 0xffff0000);
-						else drawList->AddRectFilled(A, B, 0xff00ff00);
+						else drawList->AddRectFilled(A, B, 0xff0000ff);
 					}
 				}
 				for (int i = 0; i < characterManager.count(); i++)
 				{
-					ImVec2 pos(positions[i].x * zoom + windowPos.x + offset.x, positions[i].y * zoom + windowPos.y + offset.y);
-					drawList->AddCircle(pos, radiuses, 0xff000000);
+					ImVec2 pos(positions[i].x * cellSize + windowPos.x + offset.x, positions[i].y * cellSize + windowPos.y + offset.y);
+					drawList->AddCircle(pos, radiuses, 0xffffffff);
 				}
 				ImGui::End();
 			}
