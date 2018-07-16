@@ -13,15 +13,15 @@ namespace action
 	{
 		manager::manager(memory::allocator& allocator, int queuesCount) : m_actionQueuesCount(queuesCount)
 		{
-			allocator.allocateQueues<actionData>(m_actionQueues, MAX_CHARACTER_COUNT, queuesCount);
+			allocator.allocateQueues<typedActionData>(m_actionQueues, MAX_CHARACTER_COUNT, queuesCount);
 		}
 
-		void manager::addAction(character::handle character, actionData action)
+		void manager::addAction(character::handle character, typedActionData action)
 		{
 			m_actionQueues[character.id].enqueue(action);
 		}
 
-		void manager::dequeueNextAction(const character::handle* characters, actionData* outActions, int count)
+		void manager::dequeueNextAction(const character::handle* characters, typedActionData* outActions, int count)
 		{
 			for (int i = 0; i < count; i++)
 			{

@@ -50,7 +50,7 @@ namespace path
 	path* allocatePaths(memory::allocator& allocator, int pathsCount, int maxStepsCount);
 	void initializePaths(memory::allocator& allocator, path* outPaths, int pathsCount, int maxStepsCount);
 	void advanceThroughPaths(path* paths, int pathCount, int steps);
-	bool toActionLists(const queue<step>* inPaths, queue<action::actionData>* outActions, int pathsCount, float velocity);
+	bool toActionLists(const queue<step>* inPaths, queue<action::typedActionData>* outActions, int pathsCount, float velocity);
 	
 
 }

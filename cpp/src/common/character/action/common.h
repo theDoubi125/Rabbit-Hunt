@@ -28,16 +28,21 @@ namespace action
 
 	struct actionData
 	{
-		type action;
 		int duration;
+		int length;
 		direction direction;
+	};
+
+	struct typedActionData
+	{
+		type action;
+		actionData data;
 	};
 
 	struct assignedAction
 	{
 		character::handle character;
-		int duration;
-		direction direction;
+		actionData data;
 	};
 
 	using characterBuffer = allocatedBuffer<character::handle, MAX_CHARACTER_COUNT>;

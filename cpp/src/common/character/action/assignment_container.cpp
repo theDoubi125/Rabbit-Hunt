@@ -13,10 +13,10 @@ namespace action
 		const assignedAction *inputCharacters = input.getData();
 		for (int i = 0; i < input.size(); i++)
 		{
-			int insertIndex = array::getIndexForSortInsert(m_durations, -inputCharacters[i].duration, m_count);
-			array::insert(m_durations, insertIndex, -inputCharacters[i].duration, m_count);
+			int insertIndex = array::getIndexForSortInsert(m_durations, -inputCharacters[i].data.duration, m_count);
+			array::insert(m_durations, insertIndex, -inputCharacters[i].data.duration, m_count);
 			array::insert(m_characters, insertIndex, inputCharacters[i].character, m_count);
-			array::insert(m_directions, insertIndex, inputCharacters[i].direction, m_count);
+			array::insert(m_directions, insertIndex, inputCharacters[i].data.direction, m_count);
 			m_count++;
 		}
 		input.clear();

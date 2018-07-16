@@ -28,7 +28,7 @@ namespace editor
 			static assignmentContainer movingManager;
 			static level::accessibilityMap map;
 			
-			static actionData selectedAction;
+			static typedActionData selectedAction;
 			static Character selectedCharacter = { 0 };
 			static bool initialized = false;
 
@@ -100,9 +100,9 @@ namespace editor
 				EndCombo();
 			}
 
-			DirectionSelector("Direction", &selectedAction.direction);
+			DirectionSelector("Direction", &selectedAction.data.direction);
 
-			SliderInt("Action Duration", &selectedAction.duration, 0, 50);
+			SliderInt("Action Duration", &selectedAction.data.duration, 0, 50);
 			
 			if (Button("Add Action"))
 			{
@@ -117,11 +117,11 @@ namespace editor
 					sprintf_s(buffer, 100, "Character %d : %d actions", i, schedulerInstance.m_actionQueues[i].size());
 					if (TreeNode(buffer))
 					{
-						actionData actions[MAX_ACTION_COUNT];
+						typedActionData actions[MAX_ACTION_COUNT];
 						schedulerInstance.m_actionQueues[i].getData(actions, MAX_ACTION_COUNT);
 						for (int j = 0; j < schedulerInstance.m_actionQueues[i].size(); j++)
 						{
-							Text("(%s, duration : %d, direction : %s)", typeNames[actions[j].action].c_str(), actions[j].duration, ImGui::getDirectionName(actions[j].direction));
+							Text("(%s, duration : %d, direction : %s)", typeNames[actions[j].action].c_str(), actions[j].data.duration, ImGui::getDirectionName(actions[j].data.direction));
 						}
 						ImGui::TreePop();
 					}

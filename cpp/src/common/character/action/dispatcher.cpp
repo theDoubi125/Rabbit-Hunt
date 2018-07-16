@@ -16,7 +16,7 @@ namespace action
 
 		void manager::update(scheduler::manager& scheduler)
 		{
-			actionData nextActionsBuffer[MAX_CHARACTER_COUNT];
+			typedActionData nextActionsBuffer[MAX_CHARACTER_COUNT];
 			const character::handle* characters = m_unassignedCharacters.getData();
 			
 			scheduler.dequeueNextAction(characters, nextActionsBuffer, m_unassignedCharacters.size());
@@ -25,7 +25,7 @@ namespace action
 			for (int i = 0; i < m_unassignedCharacters.size(); i++)
 			{
 				type actionType = nextActionsBuffer[i].action;
-				m_actionHandlerInputs[actionType].add({ characters[i], nextActionsBuffer[i].duration, nextActionsBuffer[i].direction });
+				m_actionHandlerInputs[actionType].add({ characters[i], nextActionsBuffer[i].data.duration, nextActionsBuffer[i].data.direction });
 			}
 			m_unassignedCharacters.clear();
 		}

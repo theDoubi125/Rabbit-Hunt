@@ -17,12 +17,12 @@ namespace action
 		{
 		public:
 			manager(memory::allocator& allocator, int size);
-			void addAction(character::handle character, actionData action);
+			void addAction(character::handle character, typedActionData action);
 
-			void dequeueNextAction(const character::handle* characters, actionData* outActions, int count);
+			void dequeueNextAction(const character::handle* characters, typedActionData* outActions, int count);
 
 		public:
-			queue<actionData> m_actionQueues[MAX_CHARACTER_COUNT];
+			queue<typedActionData> m_actionQueues[MAX_CHARACTER_COUNT];
 			int m_actionQueuesCount;
 		};
 	}

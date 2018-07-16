@@ -35,18 +35,18 @@ namespace path
 		}
 	}
 
-	bool toActionLists(const queue<step>* inPaths, queue<action::actionData>* outActions, int pathsCount, float velocity)
+	bool toActionLists(const queue<step>* inPaths, queue<action::typedActionData>* outActions, int pathsCount, float velocity)
 	{
 		for (int i = 0; i < pathsCount; i++)
 		{
 			for (queue<step>::const_iterator it = inPaths[i].getIterator(); !it.endReached(); it++)
 			{
 				step currentStep = it.value();
-				action::actionData nextAction;
+				action::typedActionData nextAction;
 				nextAction.action = action::type::MOVING;
 				
-				nextAction.direction = getVectorDirection(currentStep.movement);
-				nextAction.duration = (int)(currentStep.movement.max()); // optim : max = length as x = 0 or y = 0
+				nextAction.data.direction = getVectorDirection(currentStep.movement);
+				nextAction.data.duration = (int)(currentStep.movement.max()); // optim : max = length as x = 0 or y = 0
 				outActions->enqueue(nextAction);
 			}
 		}
