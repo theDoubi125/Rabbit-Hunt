@@ -19,12 +19,13 @@ namespace ImGui
 			return left;
 		case action::direction::RIGHT:
 			return right;
+		default:
+			return nullptr;
 		}
 	}
 
 	bool DirectionSelector(char* label, action::direction* direction)
 	{
-		char buffer[100];
 		char* directionName = getDirectionName(*direction);
 		bool result = false;
 		if (BeginCombo(label, directionName))

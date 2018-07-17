@@ -92,8 +92,8 @@ namespace input
 				m_keyStates[m_event.key.keysym.sym] = -m_frame;
 				break;
 			case SDL_MOUSEMOTION:
-				m_mousePos.x = m_event.motion.x;
-				m_mousePos.y = m_event.motion.y;
+				m_mousePos.x = (float)m_event.motion.x;
+				m_mousePos.y = (float)m_event.motion.y;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if (ImGui::GetIO().WantCaptureMouse)
@@ -196,7 +196,7 @@ namespace input
 
 	bool isButtonHandled(int button)
 	{
-		return m_buttonHandled & (1 << button);
+		return (m_buttonHandled & (1 << button)) != 0;
 	}
 	
 	void handleButton(int button)

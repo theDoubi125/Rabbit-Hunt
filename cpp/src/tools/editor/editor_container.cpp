@@ -57,7 +57,7 @@ namespace editor
 			sprintf_s(buf, "%d", selectedHandle.id);
 			if (BeginCombo("To Remove Combo", buf))
 			{
-				for (int i = 0; i < values.size(); i++)
+				for (size_t i = 0; i < values.size(); i++)
 				{
 					sprintf_s(buf, "(%d, %c)", values[i].arrayHandle.id, values[i].value);
 					if (Selectable(buf, selectedHandle == values[i].arrayHandle))

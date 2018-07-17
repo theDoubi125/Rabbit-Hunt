@@ -59,10 +59,10 @@ struct vec2
 
 	float angle() const { return atan2(y, x); }
 
-	vec2 normalized() const 
-	{ 
+	vec2 normalized() const
+	{
 		float norm = size();
-		if(norm > 0)
+		if (norm > 0)
 			return vec2(x / norm, y / norm);
 		return vec2(0, 0);
 	}
@@ -92,6 +92,12 @@ struct vec2
 
 	float x, y;
 };
+
+inline vec2 operator/(const ivec2& A, float f)
+{
+	return vec2(A.x / f, A.y / f);
+}
+
 
 inline vec2 operator+(const vec2& A, const vec2& B)
 {
@@ -139,3 +145,13 @@ struct vec3
 
 vec2 operator*(ivec2 V, float f);
 vec2 operator*(float f, ivec2 V);
+
+inline vec2 toFloatVec(ivec2 V)
+{
+	return vec2((float)V.x, (float)V.y);
+}
+
+inline ivec2 toIntVec(vec2 V)
+{
+	return ivec2((int)V.x, (int)V.y);
+}

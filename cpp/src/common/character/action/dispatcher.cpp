@@ -25,7 +25,7 @@ namespace action
 			for (int i = 0; i < m_unassignedCharacters.size(); i++)
 			{
 				type actionType = nextActionsBuffer[i].action;
-				m_actionHandlerInputs[actionType].add({ characters[i], nextActionsBuffer[i].data.duration, nextActionsBuffer[i].data.direction });
+				m_actionHandlerInputs[actionType].add({ characters[i], nextActionsBuffer[i].data });
 			}
 			m_unassignedCharacters.clear();
 		}

@@ -10,7 +10,7 @@ namespace level
 		int cellIndex = relPos.x + relPos.y * size.x;
 		int arrayIndex = cellIndex / (8 * sizeof(int));
 		int arrayOffset = cellIndex % (8 * sizeof(int));
-		return data[arrayIndex] & (1 << arrayOffset);
+		return (data[arrayIndex] & (1 << arrayOffset)) != 0;
 	}
 
 	void accessibilityMap::setAccessible(const ivec2& cell, bool accessible)
@@ -28,7 +28,7 @@ namespace level
 
 	void accessibilityMap::setAllAccessible()
 	{
-		for (int i = 0; i < (size.x * size.y) / (8 * sizeof(int)) + 1; i++)
+		for (size_t i = 0; i < (size.x * size.y) / (8 * sizeof(int)) + 1; i++)
 		{
 			data[i] = -1;
 		}
