@@ -8,12 +8,25 @@ namespace editor
 	{
 		ivec2 screenToWorld(const level::accessibilityMap& map, ivec2 pos, float cellSize)
 		{
-			return toIntVec((pos - map.min) / cellSize);
+			vec2 windowPos = ImGui::GetWindowPos();
+			return toIntVec((toFloatVec(pos) - windowPos - toFloatVec(map.min)) / cellSize);
 		}
 		
 		ivec2 worldToScreen(const level::accessibilityMap& map, ivec2 pos, float cellSize)
 		{
-			return toIntVec(pos * cellSize) + map.min;
+			vec2 windowPos = ImGui::GetWindowPos();
+			return toIntVec(pos * cellSize) + map.min + toIntVec(windowPos);
+		}
+
+		void drawMouseCursor(const level::accessibilityMap& map, float cellSize)
+		{
+			vec2 mousePos = ImGui::GetMousePos();
+			ImGui::Text("%d %d", screenToWorld(map, toIntVec(mousePos), cellSize).x, screenToWorld(map, toIntVec(mousePos), cellSize).y);
+			ivec2 A = worldToScreen(map, screenToWorld(map, toIntVec(mousePos), cellSize), cellSize);
+
+			ImDrawList* drawList = ImGui::GetWindowDrawList();
+			ivec2 B = A + ivec2((int)cellSize, (int)cellSize);
+			drawList->AddRectFilled(toFloatVec(A), toFloatVec(B), 0x55ffffff);
 		}
 
 		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map)
@@ -48,11 +61,7 @@ namespace editor
 						B.x = max.x + windowPos.x;
 						A.y = pos.y + windowPos.y;
 						B.y = max.y + windowPos.y;
-						if (A.x <= mousePos.x && A.y <= mousePos.y && B.x > mousePos.x && B.y > mousePos.y)
-						{
-							color = 0xff00ff00;
-						}
-						else if (map.isAccessible(ivec2(i, j)))
+						if (map.isAccessible(ivec2(i, j)))
 							color = 0xffff0000;
 						else color = 0xff0000ff;
 							drawList->AddRectFilled(A, B, color);
@@ -63,6 +72,7 @@ namespace editor
 					ImVec2 pos(positions[i].x * cellSize + windowPos.x + offset.x, positions[i].y * cellSize + windowPos.y + offset.y);
 					drawList->AddCircle(pos, radiuses, 0xffffffff);
 				}
+				drawMouseCursor(map, cellSize);
 				ImGui::End();
 			}
 			ImGui::PopStyleColor();
