@@ -52,5 +52,5 @@ namespace path
 	void advanceThroughPaths(path* paths, int pathCount, int steps);
 	bool toActionLists(const queue<step>* inPaths, queue<action::typedActionData>* outActions, int pathsCount, float velocity);
 	
-
+	void sortByXAndY(ivec2* tBase, ivec2* t, int count);
 }

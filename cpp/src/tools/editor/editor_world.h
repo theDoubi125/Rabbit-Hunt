@@ -7,6 +7,27 @@ namespace editor
 {
 	namespace world
 	{
-		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map);
+		struct pathToolData
+		{
+			character::handle selectedCharacter = { -1 };
+		};
+
+		enum class editorTool
+		{
+			Wall,
+			Path
+		};
+
+		struct editorData
+		{
+			editorTool selectedTool = editorTool::Wall;
+			int cellSize = 20;
+
+			union toolData { pathToolData path; };
+
+			toolData selectedToolData = {};
+		};
+
+		void drawWorldEditor(editorData& data, const character::manager& characterManager, level::accessibilityMap& map);
 	}
 }

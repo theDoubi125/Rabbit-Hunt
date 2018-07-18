@@ -38,6 +38,8 @@ namespace editor
 			static float autoPlayFps = 10;
 			static float playTime = 0;
 
+			static editor::world::editorData edData;
+
 			if (!initialized)
 			{
 				idleManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
@@ -172,7 +174,7 @@ namespace editor
 			drawAssignmentEditor("Idle", idleManager);
 			drawAssignmentEditor("Moving", movingManager);
 
-			world::drawWorldEditor(characterManager, map);
+			world::drawWorldEditor(edData, characterManager, map);
 
 			PopID();
 			End();
