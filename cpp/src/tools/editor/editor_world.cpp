@@ -29,16 +29,28 @@ namespace editor
 			drawList->AddRectFilled(toFloatVec(A), toFloatVec(B), 0x55ffffff);
 		}
 
-		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map)
+		void drawCharacters(const character::manager& characterManager, const level::accessibilityMap& map, float cellSize)
 		{
-			static int cellSize = 20;
-			static float radiuses = cellSize/2.0f;
-			static vec2 offset(radiuses, radiuses);
-
+			float radiuses = cellSize / 2.0f;
+			vec2 offset(radiuses, radiuses);
+			vec2 windowPos = ImGui::GetWindowPos();
 			vec2 positions[MAX_CHARACTER_COUNT];
 			character::handle handles[MAX_CHARACTER_COUNT];
 			characterManager.getHandles(handles, MAX_CHARACTER_COUNT);
 			characterManager.get(handles, positions, characterManager.count());
+			ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+			for (int i = 0; i < characterManager.count(); i++)
+			{
+				ImVec2 pos(positions[i].x * cellSize + windowPos.x + offset.x, positions[i].y * cellSize + windowPos.y + offset.y);
+				drawList->AddCircle(pos, radiuses, 0xffffffff);
+			}
+		}
+
+		void drawWorldEditor(const character::manager& characterManager, const level::accessibilityMap& map)
+		{
+			static int cellSize = 20;
+
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 1, 1));
 			if (ImGui::Begin("World", nullptr, ImGuiWindowFlags_NoTitleBar))
@@ -67,11 +79,7 @@ namespace editor
 							drawList->AddRectFilled(A, B, color);
 					}
 				}
-				for (int i = 0; i < characterManager.count(); i++)
-				{
-					ImVec2 pos(positions[i].x * cellSize + windowPos.x + offset.x, positions[i].y * cellSize + windowPos.y + offset.y);
-					drawList->AddCircle(pos, radiuses, 0xffffffff);
-				}
+				drawCharacters(characterManager, map, cellSize);
 				drawMouseCursor(map, cellSize);
 				ImGui::End();
 			}
