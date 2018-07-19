@@ -97,6 +97,11 @@ public:
 		}
 	}
 
+	T get(const handle& handle) const
+	{
+		return m_data[m_indirs[handle.id]];
+	}
+
 	int count() const
 	{
 		return m_allocCursor;

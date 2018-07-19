@@ -52,6 +52,8 @@ namespace path
 
 		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath, memory::allocator& allocator)
 		{
+			if (target.x < data.min.x || target.x >= data.min.x + data.size.x || target.y < data.min.y || target.y >= data.min.y + data.size.y)
+				return;
 			allocator.pushStack();
 			buffer<ivec2> reversedPath = allocator.allocateBuffer<ivec2>(outPath.steps.m_size);
 			reversedPath.add(target);
@@ -66,9 +68,32 @@ namespace path
 			}
 
 			ivec2 cursorPos = data.origin;
-			for (int i = reversedPath.size() - 1; i >= 0; i--)
+			for (int i = reversedPath.size() - 2; i >= 0; i--)
 			{
-				outPath.steps.enqueue({ reversedPath.m_data[i] - cursorPos, action::direction::RIGHT });
+				ivec2 dispVec = reversedPath.m_data[i] - cursorPos;
+				action::direction dir;
+				int distance = abs(dispVec.x);
+				if (dispVec.x > 0)
+				{
+					dir = action::direction::RIGHT;
+				}
+				else if (dispVec.x < 0)
+				{
+					dir = action::direction::LEFT;
+				}
+				else // dispVec.x == 0
+				{
+					distance = abs(dispVec.y);
+					if (dispVec.y < 0)
+					{
+						dir = action::direction::UP;
+					}
+					else dir = action::direction::DOWN;
+				}
+				if (distance == 0)
+					distance = abs(dispVec.y);
+				outPath.steps.enqueue({ distance, dir });
+				cursorPos = reversedPath.m_data[i];
 			}
 			allocator.popStack();
 		}

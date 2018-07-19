@@ -38,9 +38,12 @@ namespace editor
 			ivec2* pathBuffer = allocator.allocate<ivec2>(50);
 			pathBuffer[0] = startPos;
 			int pathLength = currentPath.steps.size();
+			ivec2 cursor = startPos;
 			for (int i = 0; i < pathLength; i++)
 			{
-				pathBuffer[i] = currentPath.steps.dequeue().movement;
+				path::step step = currentPath.steps.dequeue();
+				cursor = cursor + path::getDirectionVector(step.lookDirection) * step.distance;
+				pathBuffer[i] = cursor;
 			}
 			path::sortByXAndY(pathBuffer, pathBuffer, pathLength);
 			if (ImGui::Begin("Dijkstra", &pathfindSelected, ImGuiWindowFlags_AlwaysAutoResize))

@@ -9,7 +9,7 @@ namespace path
 {
 	struct step
 	{
-		ivec2 movement;
+		int distance;
 		action::direction lookDirection;
 	};
 
@@ -32,6 +32,7 @@ namespace path
 		case action::direction::RIGHT:
 			return ivec2(1, 0);
 		}
+		return ivec2(0, 1);
 	}
 
 	inline action::direction getVectorDirection(const ivec2 direction)

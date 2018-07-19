@@ -12,10 +12,7 @@ namespace action
 			{
 				velocities[i] = directionVectors[assignmentContainer.m_directions[i]];
 			}
-			for (int i = 0; i < assignmentContainer.m_count; i++)
-			{
-				characters.move(assignmentContainer.m_characters, velocities, assignmentContainer.m_count);
-			}
+			characters.move(assignmentContainer.m_characters, velocities, assignmentContainer.m_count);
 		}
 	}
 }

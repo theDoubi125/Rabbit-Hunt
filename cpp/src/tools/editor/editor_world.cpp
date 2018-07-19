@@ -4,11 +4,14 @@
 #include "memory/allocator.h"
 #include "imgui/imgui.h"
 #include "path/dijkstra.h"
+#include "path/path.h"
 
 namespace editor
 {
 	namespace world
 	{
+		char* editorToolNames[] = { "Window", "Wall", "Path" };
+
 		static memory::allocator allocator(1000000);
 
 		ivec2 screenToWorld(const level::accessibilityMap& map, ivec2 pos, float cellSize)
@@ -57,40 +60,61 @@ namespace editor
 			vec2 mousePos = ImGui::GetMousePos();
 			ivec2 mouseCell = screenToWorld(map, toIntVec(mousePos), (float)data.cellSize);
 			const ImGuiIO& IO = ImGui::GetIO();
-			if (IO.MouseClicked[0])
+			if (IO.MouseDown[0])
 			{
-				map.setAccessible(mouseCell, !map.isAccessible(mouseCell));
+				map.setAccessible(mouseCell, !data.selectedToolData.wall.selectedTile);
 			}
 		}
 
-		void updatePathTool(editorData& data, const character::manager& characterManager, level::accessibilityMap& map)
+		void updatePathTool(editorData& data, const character::manager& characterManager, action::scheduler::manager& scheduler, level::accessibilityMap& map)
 		{
 			const ImGuiIO& IO = ImGui::GetIO();
 
-			
 			vec2 mousePos = ImGui::GetMousePos();
-			ivec2 mouseCell = screenToWorld(map, toIntVec(mousePos), data.cellSize);
+			ivec2 mouseCell = screenToWorld(map, toIntVec(mousePos), (float)data.cellSize);
 
 			vec2 positions[MAX_CHARACTER_COUNT];
 			character::handle handles[MAX_CHARACTER_COUNT];
 			characterManager.getHandles(handles, MAX_CHARACTER_COUNT);
 			characterManager.get(handles, positions, characterManager.count());
 
-			if (IO.MouseClicked[0])
+			if (IO.MouseClicked[0] && map.isAccessible(mouseCell))
 			{
-				if (data.selectedToolData.path.selectedCharacter.id >= 0)
-				{
-					float radiuses = (float)data.cellSize / 2.0f;
-					vec2 offset(radiuses, radiuses);
-
-				}
-
+				
+				bool onCharacterCell = false;
 				for (int i = 0; i < characterManager.count(); i++)
 				{
 					if (toIntVec(positions[i]) == mouseCell)
 					{
+						onCharacterCell = true;
 						data.selectedToolData.path.selectedCharacter = handles[i];
 					}
+				}
+				if (!onCharacterCell && data.selectedToolData.path.selectedCharacter.id >= 0)
+				{
+					float radiuses = (float)data.cellSize / 2.0f;
+					vec2 offset(radiuses, radiuses);
+
+					allocator.pushStack();
+					character::handle selectedCharacter = data.selectedToolData.path.selectedCharacter;
+					vec2 characterPos = characterManager.get(selectedCharacter);
+					path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(toIntVec(characterPos), 40, allocator, map);
+					path::path currentPath;
+					currentPath.steps = allocator.allocateQueue<path::step>(50);
+					path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath, allocator);
+					if (currentPath.steps.size() > 0)
+					{
+						queue<action::typedActionData> actions = allocator.allocateQueue<action::typedActionData>(100);
+						path::toActionLists(&currentPath.steps, &actions, 1, 1);
+						action::typedActionData actionData;
+						while (actions.size() > 0)
+						{
+							actionData = actions.dequeue();
+							scheduler.addAction(selectedCharacter, actionData);
+
+						}
+					}
+					allocator.popStack();
 				}
 			}
 			if (data.selectedToolData.path.selectedCharacter.id >= 0)
@@ -117,15 +141,18 @@ namespace editor
 						ivec2* pathBuffer = allocator.allocate<ivec2>(50);
 						pathBuffer[0] = characterCell;
 						int pathLength = currentPath.steps.size();
+						ivec2 cursor = characterCell;
 						for (int i = 0; i < pathLength; i++)
 						{
-							pathBuffer[i] = currentPath.steps.dequeue().movement;
+							path::step step = currentPath.steps.dequeue();
+							cursor = cursor + path::getDirectionVector(step.lookDirection) * step.distance;
+							pathBuffer[i] = cursor;
 						}
 						path::sortByXAndY(pathBuffer, pathBuffer, pathLength);
 
 						for (int i = 0; i < pathLength; i++)
 						{
-							ivec2 A = worldToScreen(map, characterCell + pathBuffer[i], data.cellSize);
+							ivec2 A = worldToScreen(map, pathBuffer[i], (float)data.cellSize);
 
 							ivec2 B = A + ivec2((int)data.cellSize, (int)data.cellSize);
 							drawList->AddRectFilled(toFloatVec(A), toFloatVec(B), 0x9900ffff);
@@ -139,15 +166,38 @@ namespace editor
 			}
 		}
 
-		void updateTool(editorData& data, const character::manager& characterManager, level::accessibilityMap& map)
+		void updateTool(editorData& data, const character::manager& characterManager, action::scheduler::manager& scheduler, level::accessibilityMap& map)
 		{
 			switch (data.selectedTool)
 			{
 			case editorTool::Path:
-				updatePathTool(data, characterManager, map);
+				updatePathTool(data, characterManager, scheduler, map);
 				break;
 			case editorTool::Wall:
 				updateWallTool(map, data);
+				break;
+			}
+		}
+
+		void drawPathToolEditor(editorData& data)
+		{
+			ImGui::Text("Selected character : %d", data.selectedToolData.path.selectedCharacter.id);
+		}
+
+		void updateWallToolEditor(editorData& data)
+		{
+			ImGui::Checkbox("Add wall", &data.selectedToolData.wall.selectedTile);
+		}
+
+		void drawToolEditor(editorData& data)
+		{
+			switch (data.selectedTool)
+			{
+			case editorTool::Path:
+				drawPathToolEditor(data);
+				break;
+			case editorTool::Wall:
+				updateWallToolEditor(data);
 				break;
 			}
 		}
@@ -156,27 +206,32 @@ namespace editor
 		{
 			if (ImGui::Begin("Tool Selector"))
 			{
-				if (ImGui::Button("Path"))
+				if (ImGui::BeginCombo("Tool", editorToolNames[(int)data.selectedTool]))
 				{
-					data.selectedTool = editorTool::Path;
+					for (int i = 0; i < (int)editorTool::Last; i++)
+					{
+						if (ImGui::Selectable(editorToolNames[i], i == (int)data.selectedTool))
+						{
+							data.selectedTool = (editorTool)i;
+						}
+					}
+					ImGui::EndCombo();
 				}
 
-				if (ImGui::Button("Wall"))
-				{
-					data.selectedTool = editorTool::Wall;
-				}
-
-				ImGui::Text("Selected character : %d", data.selectedToolData.path.selectedCharacter.id);
+				drawToolEditor(data);
 
 				ImGui::End();
 			}
 		}
 
-		void drawWorldEditor(editorData& data, const character::manager& characterManager, level::accessibilityMap& map)
+		void drawWorldEditor(editorData& data, const character::manager& characterManager, action::scheduler::manager& scheduler, level::accessibilityMap& map)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 1, 1));
-			if (ImGui::Begin("World", nullptr, ImGuiWindowFlags_NoTitleBar))
+			ImGuiWindowFlags flags = 0;
+			if (data.selectedTool != editorTool::Window)
+				flags = ImGuiWindowFlags_NoInputs;
+			if (ImGui::Begin("World", nullptr, ImGuiWindowFlags_NoTitleBar | flags))
 			{
 				ImDrawList* drawList = ImGui::GetWindowDrawList();
 				ImVec2 windowPos = ImGui::GetWindowPos();
@@ -203,7 +258,7 @@ namespace editor
 				}
 				drawCharacters(characterManager, map, data.cellSize);
 				drawMouseCursor(map, (float)data.cellSize);
-				updateTool(data, characterManager, map);
+				updateTool(data, characterManager, scheduler, map);
 				ImGui::End();
 			}
 			ImGui::PopStyleColor();

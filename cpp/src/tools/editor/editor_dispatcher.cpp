@@ -174,7 +174,7 @@ namespace editor
 			drawAssignmentEditor("Idle", idleManager);
 			drawAssignmentEditor("Moving", movingManager);
 
-			world::drawWorldEditor(edData, characterManager, map);
+			world::drawWorldEditor(edData, characterManager, schedulerInstance, map);
 
 			PopID();
 			End();
