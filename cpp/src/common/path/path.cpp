@@ -49,7 +49,7 @@ namespace path
 				ivec2 movement = getDirectionVector(currentStep.lookDirection) * currentStep.distance;
 				nextAction.data.direction = currentStep.lookDirection;
 				nextAction.data.length = currentStep.distance; // optim : max = length as x = 0 or y = 0
-				nextAction.data.duration = currentStep.distance;
+				nextAction.data.duration = currentStep.distance / velocity;
 				outActions->enqueue(nextAction);
 			}
 		}

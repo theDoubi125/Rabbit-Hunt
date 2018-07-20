@@ -24,7 +24,7 @@ namespace editor
 
 		for (int i = 0; i < idleManager.m_count; i++)
 		{
-			Text("(id : %d, duration : %d, direction : %s)", idleManager.m_characters[i].id, -idleManager.m_durations[i], getDirectionName(idleManager.m_directions[i]));
+			Text("(id : %d, duration : %d, direction : %s)", idleManager.characters[i].id, -idleManager.durations[i], getDirectionName(idleManager.actionData[i].direction));
 		}
 
 		DragInt("character id", &currentCharacter.id, 1, 0, 100);

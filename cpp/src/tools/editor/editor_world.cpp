@@ -105,7 +105,7 @@ namespace editor
 					if (currentPath.steps.size() > 0)
 					{
 						queue<action::typedActionData> actions = allocator.allocateQueue<action::typedActionData>(100);
-						path::toActionLists(&currentPath.steps, &actions, 1, 1);
+						path::toActionLists(&currentPath.steps, &actions, 1, 1/60.0f);
 						action::typedActionData actionData;
 						while (actions.size() > 0)
 						{

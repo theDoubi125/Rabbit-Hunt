@@ -5,7 +5,7 @@ namespace action
 {
 	void assignmentContainer::add(character::handle character, int duration)
 	{
-		array::addSortedWithIndex(m_characters, m_durations, character, -duration, m_count);
+		array::addSortedWithIndex(characters, durations, character, -duration, m_count);
 	}
 
 	void assignmentContainer::handleInput()
@@ -13,10 +13,10 @@ namespace action
 		const assignedAction *inputCharacters = input.getData();
 		for (int i = 0; i < input.size(); i++)
 		{
-			int insertIndex = array::getIndexForSortInsert(m_durations, -inputCharacters[i].data.duration, m_count);
-			array::insert(m_durations, insertIndex, -inputCharacters[i].data.duration, m_count);
-			array::insert(m_characters, insertIndex, inputCharacters[i].character, m_count);
-			array::insert(m_directions, insertIndex, inputCharacters[i].data.direction, m_count);
+			int insertIndex = array::getIndexForSortInsert(durations, -inputCharacters[i].data.duration, m_count);
+			array::insert(durations, insertIndex, -inputCharacters[i].data.duration, m_count);
+			array::insert(characters, insertIndex, inputCharacters[i].character, m_count);
+			array::insert(actionData, insertIndex, inputCharacters[i].data, m_count);
 			m_count++;
 		}
 		input.clear();
@@ -27,8 +27,8 @@ namespace action
 		int firstToRemove = -1;
 		for (int i = m_count - 1; i >= 0; i--)
 		{
-			m_durations[i]++;
-			if (m_durations[i] >= 0)
+			durations[i]++;
+			if (durations[i] >= 0)
 			{
 				firstToRemove = i;
 			}
@@ -36,7 +36,7 @@ namespace action
 		if (firstToRemove >= 0)
 		{
 			for (int i = 0; i < m_count - firstToRemove; i++)
-				output.add(m_characters[i + firstToRemove]);
+				output.add(characters[i + firstToRemove]);
 			m_count = firstToRemove;
 		}
 	}

@@ -26,9 +26,9 @@ namespace action
 		buffer<character::handle> output;
 		allocatedBuffer<assignedAction, MAX_CHARACTER_COUNT> input;
 
-		int m_durations[MAX_CHARACTER_COUNT];
-		character::handle m_characters[MAX_CHARACTER_COUNT];
-		direction m_directions[MAX_CHARACTER_COUNT];
+		int durations[MAX_CHARACTER_COUNT];
+		character::handle characters[MAX_CHARACTER_COUNT];
+		action::actionData actionData[MAX_CHARACTER_COUNT];
 		int m_count;
 
 		friend void editor::drawAssignmentEditor(char* label, assignmentContainer& assignments);

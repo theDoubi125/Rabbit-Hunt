@@ -1,4 +1,5 @@
 #include "move.h"
+#include "path/path.h"
 
 namespace action
 {
@@ -7,12 +8,13 @@ namespace action
 		void move(const assignmentContainer& assignmentContainer, character::manager& characters)
 		{
 			vec2 velocities[MAX_CHARACTER_COUNT];
-			vec2 directionVectors[4] = { vec2(0, -1), vec2(0, 1), vec2(-1, 0), vec2(1, 0) };
 			for (int i = 0; i < assignmentContainer.m_count; i++)
 			{
-				velocities[i] = directionVectors[assignmentContainer.m_directions[i]];
+				actionData data = assignmentContainer.actionData[i];
+				vec2 dirVec = toFloatVec(path::getDirectionVector(data.direction));
+				velocities[i] = dirVec * data.length / data.duration;
 			}
-			characters.move(assignmentContainer.m_characters, velocities, assignmentContainer.m_count);
+			characters.move(assignmentContainer.characters, velocities, assignmentContainer.m_count);
 		}
 	}
 }
