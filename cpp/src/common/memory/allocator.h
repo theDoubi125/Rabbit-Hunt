@@ -4,6 +4,7 @@
 
 namespace memory
 {
+
 	class allocator
 	{
 	public:
@@ -19,7 +20,7 @@ namespace memory
 			delete m_data;
 		}
 
-		template<typename T> 
+		template<typename T>
 		T* allocate(int count)
 		{
 			T* result = (T*)(m_data + m_cursor);
@@ -33,7 +34,7 @@ namespace memory
 			m_stack -= 1;
 			return (void*)m_stack > (void*)(m_data + m_cursor);
 		}
-		
+
 		bool popStack()
 		{
 			m_stack += 1;
@@ -82,4 +83,45 @@ namespace memory
 		size_t m_size;
 		size_t* m_stack;
 	};
+
+	namespace util
+	{
+		extern allocator* mainAllocator;
+
+		void createMainAllocator(size_t size);
+
+		template<typename T>
+		T* allocate(int count)
+		{
+			return mainAllocator->allocate<T>(count);
+		}
+
+		template<typename T>
+		inline buffer<T> allocateBuffer(int size)
+		{
+			return mainAllocator->allocateBuffer<T>(size);
+		}
+
+		template<typename T>
+		inline queue<T> allocateQueue(int size)
+		{
+			return mainAllocator->allocateQueue<T>(size);
+		}
+
+		template<typename T>
+		void allocateQueues(queue<T>* outQueues, int queueSize, int queueCount)
+		{
+			return mainAllocator->allocateQueues<T>(outQueues, queueSize, queueCount);
+		}
+
+		inline bool pushAllocatorStack()
+		{
+			return mainAllocator->pushStack();
+		}
+
+		inline bool popAllocatorStack()
+		{
+			return mainAllocator->popStack();
+		}
+	}
 }

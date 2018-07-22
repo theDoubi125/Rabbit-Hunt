@@ -4,24 +4,25 @@ namespace path
 {
 	namespace dijkstra
 	{
-		dijkstraMap dijkstra(ivec2 origin, int distance, memory::allocator& allocator, const level::accessibilityMap& accessibility)
+		using namespace memory::util;
+		dijkstraMap dijkstra(ivec2 origin, int distance, const level::accessibilityMap& accessibility)
 		{
 			dijkstraMap result;
 			result.origin = origin;
 			result.min = origin - ivec2(distance, distance);
 			result.size = ivec2(distance * 2 + 1, distance * 2 + 1);
 			int cellCount = result.size.x * result.size.y;
-			result.precedents = allocator.allocate<ivec2>(cellCount);
-			result.distances = allocator.allocate<float>(cellCount);
+			result.precedents = allocate<ivec2>(cellCount);
+			result.distances = allocate<float>(cellCount);
 			for (int i = 0; i < cellCount; i++)
 			{
 				result.distances[i] = -1;
 			}
-			allocator.pushStack();
+			pushAllocatorStack();
 
 			struct posDist { ivec2 pos; float dist; };
 
-			queue<posDist> toCompute = allocator.allocateQueue<posDist>(distance * distance);
+			queue<posDist> toCompute = allocateQueue<posDist>(distance * distance);
 			toCompute.enqueue({ origin, 0 });
 			result.distances[result.posToIndex(origin)] = 0;
 			while (toCompute.size() > 0)
@@ -46,16 +47,16 @@ namespace path
 					}
 				}
 			}
-			allocator.popStack();
+			popAllocatorStack();
 			return result;
 		}
 
-		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath, memory::allocator& allocator)
+		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath)
 		{
 			if (target.x < data.min.x || target.x >= data.min.x + data.size.x || target.y < data.min.y || target.y >= data.min.y + data.size.y)
 				return;
-			allocator.pushStack();
-			buffer<ivec2> reversedPath = allocator.allocateBuffer<ivec2>(outPath.steps.m_size);
+			pushAllocatorStack();
+			buffer<ivec2> reversedPath = allocateBuffer<ivec2>(outPath.steps.m_size);
 			reversedPath.add(target);
 			if (data.distances[data.posToIndex(target)] >= 0)
 			{
@@ -95,7 +96,7 @@ namespace path
 				outPath.steps.enqueue({ distance, dir });
 				cursorPos = reversedPath.m_data[i];
 			}
-			allocator.popStack();
+			popAllocatorStack();
 		}
 	}
 }

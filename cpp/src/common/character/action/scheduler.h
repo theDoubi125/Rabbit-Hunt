@@ -16,7 +16,7 @@ namespace action
 		class manager
 		{
 		public:
-			manager(memory::allocator& allocator, int size);
+			void allocate(int size);
 			void addAction(character::handle character, typedActionData action);
 
 			void dequeueNextAction(const character::handle* characters, typedActionData* outActions, int count);

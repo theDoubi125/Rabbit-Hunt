@@ -24,7 +24,7 @@ namespace path
 			}
 		};
 
-		dijkstraMap dijkstra(ivec2 origin, int distance, memory::allocator& allocator, const level::accessibilityMap& accessibility);
-		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath, memory::allocator& allocator);
+		dijkstraMap dijkstra(ivec2 origin, int distance, const level::accessibilityMap& accessibility);
+		void getPathTo(const dijkstraMap& data, ivec2 target, path& outPath);
 	}
 }

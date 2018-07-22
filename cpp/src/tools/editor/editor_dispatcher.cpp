@@ -20,9 +20,8 @@ namespace editor
 	{
 		void drawDispatcherEditor(float deltaTime)
 		{
-			static memory::allocator allocator(1000000);
 			static Dispatcher dispatcherInstance;
-			static Scheduler schedulerInstance(allocator, 100);
+			static Scheduler schedulerInstance;
 			static character::manager characterManager;
 			static assignmentContainer idleManager;
 			static assignmentContainer noneManager;
@@ -46,13 +45,14 @@ namespace editor
 				idleManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				movingManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				noneManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
+				schedulerInstance.allocate(100);
 				dispatcherInstance.bindHandler(type::IDLE, idleManager.input.getRef());
 				dispatcherInstance.bindHandler(type::MOVING, movingManager.input.getRef());
 				dispatcherInstance.bindHandler(type::NONE, noneManager.input.getRef());
 				initialized = true; 
 				map.min = ivec2(0, 0);
 				map.size = ivec2(11, 11);
-				map.data = allocator.allocate<unsigned int>(map.size.x * map.size.y);
+				map.data = memory::util::allocate<unsigned int>(map.size.x * map.size.y);
 				map.setAllAccessible();
 				map.setAccessible(ivec2(3, 3), false);
 			}

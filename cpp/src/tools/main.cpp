@@ -10,6 +10,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl_gl3.h"
 
+#include "memory/allocator.h"
+
 #include "editor/editor_main.h"
 
 
@@ -94,6 +96,9 @@ int main(int argc, char *argv[])
 	irect screenSize = { 0, 0, 0, 0 };
 
 	Uint32 frameStartTime = SDL_GetTicks();
+
+	memory::util::createMainAllocator(10000000);
+
 	while (!input::isWindowClosed())
 	{
 		input::update();

@@ -11,9 +11,12 @@ namespace action
 
 	namespace scheduler
 	{
-		manager::manager(memory::allocator& allocator, int queuesCount) : m_actionQueuesCount(queuesCount)
+		using namespace memory::util;
+
+		void manager::allocate(int queuesCount)
 		{
-			allocator.allocateQueues<typedActionData>(m_actionQueues, MAX_CHARACTER_COUNT, queuesCount);
+			m_actionQueuesCount = queuesCount;
+			allocateQueues<typedActionData>(m_actionQueues, MAX_CHARACTER_COUNT, queuesCount);
 		}
 
 		void manager::addAction(character::handle character, typedActionData action)

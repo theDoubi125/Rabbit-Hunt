@@ -8,6 +8,7 @@ namespace editor
 {
 	namespace pathfind
 	{
+		using namespace memory::util;
 		void drawDijkstraEditor()
 		{
 			static bool initialized = false;
@@ -16,7 +17,6 @@ namespace editor
 			static ivec2 targetPos = ivec2(5, 5);
 			static int maxDist = 10;
 			static level::accessibilityMap accessibility;
-			static memory::allocator allocator(1000000);
 			static ivec2 target(3, 0);
 			const unsigned size = 5000;
 			const unsigned maxValue = 100;
@@ -26,16 +26,16 @@ namespace editor
 			{
 				accessibility.min = ivec2(-5, -5);
 				accessibility.size = ivec2(11, 11);
-				accessibility.data = allocator.allocate<unsigned int>(accessibility.size.x * accessibility.size.y);
+				accessibility.data = allocate<unsigned int>(accessibility.size.x * accessibility.size.y);
 				accessibility.setAllAccessible();
 				initialized = true; 
 			}
-			allocator.pushStack();
-			path::dijkstra::dijkstraMap map = path::dijkstra::dijkstra(startPos, maxDist, allocator, accessibility);
+			pushAllocatorStack();
+			path::dijkstra::dijkstraMap map = path::dijkstra::dijkstra(startPos, maxDist, accessibility);
 			path::path currentPath;
-			currentPath.steps = allocator.allocateQueue<path::step>(50);
-			path::dijkstra::getPathTo(map, target, currentPath, allocator);
-			ivec2* pathBuffer = allocator.allocate<ivec2>(50);
+			currentPath.steps = allocateQueue<path::step>(50);
+			path::dijkstra::getPathTo(map, target, currentPath);
+			ivec2* pathBuffer = allocate<ivec2>(50);
 			pathBuffer[0] = startPos;
 			int pathLength = currentPath.steps.size();
 			ivec2 cursor = startPos;
@@ -91,7 +91,7 @@ namespace editor
 				}
 				ImGui::End();
 			}
-			allocator.popStack();
+			popAllocatorStack();
 		}
 	}
 }

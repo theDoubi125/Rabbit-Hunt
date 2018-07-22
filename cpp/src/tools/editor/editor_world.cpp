@@ -6,13 +6,13 @@
 #include "path/dijkstra.h"
 #include "path/path.h"
 
+using namespace memory::util;
+
 namespace editor
 {
 	namespace world
 	{
 		char* editorToolNames[] = { "Window", "Wall", "Path" };
-
-		static memory::allocator allocator(1000000);
 
 		ivec2 screenToWorld(const level::accessibilityMap& map, ivec2 pos, float cellSize)
 		{
@@ -95,16 +95,16 @@ namespace editor
 					float radiuses = (float)data.cellSize / 2.0f;
 					vec2 offset(radiuses, radiuses);
 
-					allocator.pushStack();
+					mainAllocator->pushStack();
 					character::handle selectedCharacter = data.selectedToolData.path.selectedCharacter;
 					vec2 characterPos = characterManager.get(selectedCharacter);
-					path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(toIntVec(characterPos), 40, allocator, map);
+					path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(toIntVec(characterPos), 40, map);
 					path::path currentPath;
-					currentPath.steps = allocator.allocateQueue<path::step>(50);
-					path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath, allocator);
+					currentPath.steps = mainAllocator->allocateQueue<path::step>(50);
+					path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath);
 					if (currentPath.steps.size() > 0)
 					{
-						queue<action::typedActionData> actions = allocator.allocateQueue<action::typedActionData>(100);
+						queue<action::typedActionData> actions = mainAllocator->allocateQueue<action::typedActionData>(100);
 						path::toActionLists(&currentPath.steps, &actions, 1, 1/60.0f);
 						action::typedActionData actionData;
 						while (actions.size() > 0)
@@ -114,7 +114,7 @@ namespace editor
 
 						}
 					}
-					allocator.popStack();
+					mainAllocator->popStack();
 				}
 			}
 			if (data.selectedToolData.path.selectedCharacter.id >= 0)
@@ -133,12 +133,12 @@ namespace editor
 
 						ivec2 characterCell = toIntVec(positions[i]);
 						int maxDist = 20;
-						allocator.pushStack();
-						path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(characterCell, maxDist, allocator, map);
+						mainAllocator->pushStack();
+						path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(characterCell, maxDist, map);
 						path::path currentPath;
-						currentPath.steps = allocator.allocateQueue<path::step>(50);
-						path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath, allocator);
-						ivec2* pathBuffer = allocator.allocate<ivec2>(50);
+						currentPath.steps = mainAllocator->allocateQueue<path::step>(50);
+						path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath);
+						ivec2* pathBuffer = mainAllocator->allocate<ivec2>(50);
 						pathBuffer[0] = characterCell;
 						int pathLength = currentPath.steps.size();
 						ivec2 cursor = characterCell;
@@ -158,7 +158,7 @@ namespace editor
 							drawList->AddRectFilled(toFloatVec(A), toFloatVec(B), 0x9900ffff);
 						}
 
-						allocator.popStack();
+						mainAllocator->popStack();
 					}
 				}
 
