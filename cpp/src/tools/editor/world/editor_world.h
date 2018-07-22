@@ -40,5 +40,7 @@ namespace editor
 		};
 
 		void drawWorldEditor(editorData& data, const character::manager& characterManager, action::scheduler::manager& scheduler, level::accessibilityMap& map);
+		ivec2 screenToWorld(const level::accessibilityMap& map, ivec2 pos, float cellSize);
+		ivec2 worldToScreen(const level::accessibilityMap& map, ivec2 pos, float cellSize);
 	}
 }

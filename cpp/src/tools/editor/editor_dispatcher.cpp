@@ -4,7 +4,7 @@
 #include "character/action/assignment_container.h"
 #include "editor_util.h"
 #include "transforms/move.h"
-#include "editor_world.h"
+#include "editor/world/editor_world.h"
 #include "memory/allocator.h"
 
 using namespace ImGui;

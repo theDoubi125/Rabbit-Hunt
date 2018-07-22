@@ -194,8 +194,9 @@
     <ClInclude Include="src\tools\editor\editor_main.h" />
     <ClInclude Include="src\tools\editor\editor_pathfind.h" />
     <ClInclude Include="src\tools\editor\editor_util.h" />
-    <ClInclude Include="src\tools\editor\editor_world.h" />
     <ClInclude Include="src\tools\editor\transforms\move.h" />
+    <ClInclude Include="src\tools\editor\world\editor_world.h" />
+    <ClInclude Include="src\tools\editor\world\tools\path_tool.h" />
     <ClInclude Include="src\tools\imgui\imconfig.h" />
     <ClInclude Include="src\tools\imgui\imgui.h" />
     <ClInclude Include="src\tools\imgui\imgui_impl_sdl_gl3.h" />
@@ -226,8 +227,9 @@
     <ClCompile Include="src\tools\editor\editor_main.cpp" />
     <ClCompile Include="src\tools\editor\editor_pathfind.cpp" />
     <ClCompile Include="src\tools\editor\editor_util.cpp" />
-    <ClCompile Include="src\tools\editor\editor_world.cpp" />
     <ClCompile Include="src\tools\editor\transforms\move.cpp" />
+    <ClCompile Include="src\tools\editor\world\editor_world.cpp" />
+    <ClCompile Include="src\tools\editor\world\tools\path_tool.cpp" />
     <ClCompile Include="src\tools\imgui\imgui.cpp" />
     <ClCompile Include="src\tools\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\tools\imgui\imgui_draw.cpp" />
