@@ -15,31 +15,7 @@ using namespace ImGui;
 
 namespace editor
 {
-	void drawAssignmentEditor(char* label, action::assignmentContainer& idleManager)
-	{
-		static character::handle currentCharacter;
-		static character::handle handledCharacters[MAX_CHARACTER_COUNT];
-		static int duration;
-		Begin(label);
-
-		for (int i = 0; i < idleManager.m_count; i++)
-		{
-			Text("(id : %d, duration : %d, direction : %s)", idleManager.characters[i].id, -idleManager.durations[i], getDirectionName(idleManager.actionData[i].direction));
-		}
-
-		DragInt("character id", &currentCharacter.id, 1, 0, 100);
-		DragInt("Duration", &duration, 1, 0, 100);
-		if (Button("Add"))
-		{
-			idleManager.add(currentCharacter, duration);
-		}
-		if (Button("Update"))
-		{
-			idleManager.update();
-		}
-
-		End();
-	}
+	
 
 	void drawMoveEditor()
 	{

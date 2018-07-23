@@ -5,7 +5,7 @@
 #include "editor_util.h"
 #include "transforms/move.h"
 #include "editor/world/editor_world.h"
-#include "memory/allocator.h"
+#include "editor/editor_actions.h"
 
 using namespace ImGui;
 
@@ -25,7 +25,7 @@ namespace editor
 			static character::manager characterManager;
 			static assignmentContainer idleManager;
 			static assignmentContainer noneManager;
-			static assignmentContainer movingManager;
+			static action::move::moveAssignmentContainer movingManager;
 			static level::accessibilityMap map;
 			
 			static typedActionData selectedAction;

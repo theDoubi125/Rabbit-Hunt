@@ -9,13 +9,9 @@ namespace action
 	class assignmentContainer;
 }
 
-namespace editor
-{
-	void drawAssignmentEditor(char* label, action::assignmentContainer& idleManager);
-}
-
 namespace action
 {
+	/* Contains all actions of that type assigned to any entity. Sorted by time of ending*/
 	class assignmentContainer
 	{
 	public:
@@ -30,7 +26,5 @@ namespace action
 		character::handle characters[MAX_CHARACTER_COUNT];
 		action::actionData actionData[MAX_CHARACTER_COUNT];
 		int m_count;
-
-		friend void editor::drawAssignmentEditor(char* label, assignmentContainer& assignments);
 	};
 }
