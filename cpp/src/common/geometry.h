@@ -155,3 +155,8 @@ inline ivec2 toIntVec(vec2 V)
 {
 	return ivec2((int)V.x, (int)V.y);
 }
+
+inline ivec2 roundVecToInt(vec2 V)
+{
+	return ivec2((int)(V.x + 0.5f), (int)(V.y + 0.5f));
+}

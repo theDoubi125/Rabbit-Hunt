@@ -29,7 +29,7 @@ namespace editor
 					bool onCharacterCell = false;
 					for (int i = 0; i < characterManager.count(); i++)
 					{
-						if (toIntVec(positions[i]) == mouseCell)
+						if (roundVecToInt(positions[i]) == mouseCell)
 						{
 							onCharacterCell = true;
 							data.selectedToolData.path.selectedCharacter = handles[i];
@@ -43,7 +43,7 @@ namespace editor
 						pushAllocatorStack();
 						character::handle selectedCharacter = data.selectedToolData.path.selectedCharacter;
 						vec2 characterPos = characterManager.get(selectedCharacter);
-						path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(toIntVec(characterPos), 40, map);
+						path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(roundVecToInt(characterPos), 40, map);
 						path::path currentPath;
 						currentPath.steps = mainAllocator->allocateQueue<path::step>(50);
 						path::dijkstra::getPathTo(dijkstraMap, mouseCell, currentPath);
@@ -76,7 +76,7 @@ namespace editor
 							ImVec2 pos(positions[i].x * data.cellSize + windowPos.x + offset.x, positions[i].y * data.cellSize + windowPos.y + offset.y);
 							drawList->AddCircleFilled(pos, radiuses / 5, 0xff7777ff);
 
-							ivec2 characterCell = toIntVec(positions[i]);
+							ivec2 characterCell = roundVecToInt(positions[i]);
 							int maxDist = 20;
 							pushAllocatorStack();
 							path::dijkstra::dijkstraMap dijkstraMap = path::dijkstra::dijkstra(characterCell, maxDist, map);
