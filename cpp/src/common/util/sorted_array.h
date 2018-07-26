@@ -48,7 +48,8 @@ namespace array
 		arraySize++;
 	}
 
-	inline int getIndexForSortInsert(int* indexArray, int toAdd, int& arraySize)
+	template<typename T>
+	inline int getIndexForSortInsert(T* indexArray, T toAdd, int& arraySize)
 	{
 		for (int i = 0; i < arraySize; i++)
 		{

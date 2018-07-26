@@ -25,7 +25,7 @@ namespace editor
 			static character::manager characterManager;
 			static assignmentContainer idleManager;
 			static assignmentContainer noneManager;
-			static action::move::moveAssignmentContainer movingManager;
+			static action::move::MoveAssignmentContainer movingManager;
 			static level::accessibilityMap map;
 			
 			static typedActionData selectedAction;
@@ -43,11 +43,11 @@ namespace editor
 			if (!initialized)
 			{
 				idleManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
-				movingManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
+				movingManager.assignmentContainerData.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				noneManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				schedulerInstance.allocate(100);
 				dispatcherInstance.bindHandler(type::IDLE, idleManager.input.getRef());
-				dispatcherInstance.bindHandler(type::MOVING, movingManager.input.getRef());
+				dispatcherInstance.bindHandler(type::MOVING, movingManager.assignmentContainerData.input.getRef());
 				dispatcherInstance.bindHandler(type::NONE, noneManager.input.getRef());
 				initialized = true; 
 				map.min = ivec2(0, 0);
@@ -108,6 +108,7 @@ namespace editor
 			DirectionSelector("Direction", &selectedAction.data.direction);
 
 			SliderInt("Action Duration", &selectedAction.data.duration, 0, 50);
+			SliderInt("Action Length", &selectedAction.data.length, 0, 20);
 			
 			if (Button("Add Action"))
 			{
@@ -179,7 +180,16 @@ namespace editor
 			}
 
 			drawAssignmentEditor("Idle", idleManager);
-			drawAssignmentEditor("Moving", movingManager);
+			drawAssignmentEditor("Moving", movingManager.assignmentContainerData);
+
+			for (int i = 0; i < movingManager.indexData.characterCount; i++)
+			{
+				ImGui::Text("character %d : %d actions, resulting velocity (%f, %f)", 
+					movingManager.indexData.sortedCharacters[i].id, 
+					movingManager.indexData.actionCountByCharacter[i], 
+					movingManager.indexData.globalVelocities[i].x, movingManager.indexData.globalVelocities[i].y
+				);
+			}
 
 			world::drawWorldEditor(edData, characterManager, schedulerInstance, map);
 

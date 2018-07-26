@@ -18,20 +18,9 @@ namespace editor
 		static int duration;
 		ImGui::Begin(label);
 
-		for (int i = 0; i < idleManager.m_count; i++)
+		for (int i = 0; i < idleManager.count; i++)
 		{
 			ImGui::Text("(id : %d, duration : %d, direction : %s)", idleManager.characters[i].id, -idleManager.durations[i], ImGui::getDirectionName(idleManager.actionData[i].direction));
-		}
-
-		ImGui::DragInt("character id", &currentCharacter.id, 1, 0, 100);
-		ImGui::DragInt("Duration", &duration, 1, 0, 100);
-		if (ImGui::Button("Add"))
-		{
-			idleManager.add(currentCharacter, duration);
-		}
-		if (ImGui::Button("Update"))
-		{
-			idleManager.update();
 		}
 
 		ImGui::End();

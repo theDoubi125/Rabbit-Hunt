@@ -15,7 +15,6 @@ namespace action
 	class assignmentContainer
 	{
 	public:
-		void add(character::handle handle, int duration);
 		void handleInput();
 		void update();
 
@@ -25,6 +24,6 @@ namespace action
 		int durations[MAX_CHARACTER_COUNT];
 		character::handle characters[MAX_CHARACTER_COUNT];
 		action::actionData actionData[MAX_CHARACTER_COUNT];
-		int m_count;
+		int count;
 	};
 }
