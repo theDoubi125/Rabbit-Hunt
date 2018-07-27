@@ -14,8 +14,8 @@ namespace collision
 
 			unsigned char flagNum = i%bitArraySize;
 			unsigned char outFlagIndex = i / bitArraySize;
-			if ((A.min.x > B.min.x && B.max.x > A.min.x) || (A.min.x <= B.min.x && A.max.x > B.min.x)
-				&& (A.min.y > B.min.y && B.max.y > A.min.y) || (A.min.y <= B.min.y && A.max.y > B.min.y))
+			if (((A.min.x > B.min.x && B.max.x > A.min.x) || (A.min.x <= B.min.x && A.max.x > B.min.x))
+				&& ((A.min.y > B.min.y && B.max.y > A.min.y) || (A.min.y <= B.min.y && A.max.y > B.min.y)))
 			{
 				outFlags[outFlagIndex] |= 1 << flagNum;
 			}
