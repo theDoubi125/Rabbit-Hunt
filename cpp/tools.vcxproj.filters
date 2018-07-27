@@ -31,9 +31,6 @@
     <ClInclude Include="src\common\level.h">
       <Filter>src\common</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\geometry.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
     <ClInclude Include="src\common\character\character.h">
       <Filter>src\common\character</Filter>
     </ClInclude>
@@ -97,6 +94,15 @@
     <ClInclude Include="src\tools\editor\world\tools\path_tool.h">
       <Filter>src\tools\editor\world\tools</Filter>
     </ClInclude>
+    <ClInclude Include="src\common\geometry\vec.h">
+      <Filter>src\common\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common\geometry\collision.h">
+      <Filter>src\common\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\editor\editor_collisions.h">
+      <Filter>src\tools\editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tools\imgui\imgui.cpp">
@@ -121,9 +127,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\common\level.cpp">
-      <Filter>src\common</Filter>
-    </ClCompile>
-    <ClCompile Include="src\common\geometry.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
     <ClCompile Include="src\common\character\character.cpp">
@@ -186,6 +189,15 @@
     <ClCompile Include="src\tools\editor\world\tools\path_tool.cpp">
       <Filter>src\tools\editor\world\tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\common\geometry\vec.cpp">
+      <Filter>src\common\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\geometry\collision.cpp">
+      <Filter>src\common\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\editor\editor_collisions.cpp">
+      <Filter>src\tools\editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -226,6 +238,9 @@
     </Filter>
     <Filter Include="src\tools\editor\world\tools">
       <UniqueIdentifier>{2fc63778-067e-4a78-9eaa-ec847dd57267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common\geometry">
+      <UniqueIdentifier>{cbfb7ef9-4bb5-4940-a60e-59ed8a5e314c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools;$(ProjectDir)src/common/geometry</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools;$(ProjectDir)src/common/geometry</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools;$(ProjectDir)src/common/geometry</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,7 +162,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src/common;$(ProjectDir)src/tools;$(ProjectDir)src/common/geometry</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -179,7 +179,8 @@
     <ClInclude Include="src\common\character\action\assignment_container.h" />
     <ClInclude Include="src\common\character\action\scheduler.h" />
     <ClInclude Include="src\common\character\character.h" />
-    <ClInclude Include="src\common\geometry.h" />
+    <ClInclude Include="src\common\geometry\collision.h" />
+    <ClInclude Include="src\common\geometry\vec.h" />
     <ClInclude Include="src\common\level.h" />
     <ClInclude Include="src\common\memory\allocator.h" />
     <ClInclude Include="src\common\path\dijkstra.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="src\common\util\alloc_array.h" />
     <ClInclude Include="src\common\util\sorted_array.h" />
     <ClInclude Include="src\tools\editor\editor_actions.h" />
+    <ClInclude Include="src\tools\editor\editor_collisions.h" />
     <ClInclude Include="src\tools\editor\editor_container.h" />
     <ClInclude Include="src\tools\editor\editor_dispatcher.h" />
     <ClInclude Include="src\tools\editor\editor_main.h" />
@@ -212,7 +214,8 @@
     <ClCompile Include="src\common\character\action\assignment_container.cpp" />
     <ClCompile Include="src\common\character\action\scheduler.cpp" />
     <ClCompile Include="src\common\character\character.cpp" />
-    <ClCompile Include="src\common\geometry.cpp" />
+    <ClCompile Include="src\common\geometry\collision.cpp" />
+    <ClCompile Include="src\common\geometry\vec.cpp" />
     <ClCompile Include="src\common\level.cpp" />
     <ClCompile Include="src\common\memory\allocator.cpp" />
     <ClCompile Include="src\common\path\dijkstra.cpp" />
@@ -222,6 +225,7 @@
     <ClCompile Include="src\common\util\alloc_array.cpp" />
     <ClCompile Include="src\common\util\sorted_array.cpp" />
     <ClCompile Include="src\tools\editor\editor_actions.cpp" />
+    <ClCompile Include="src\tools\editor\editor_collisions.cpp" />
     <ClCompile Include="src\tools\editor\editor_container.cpp" />
     <ClCompile Include="src\tools\editor\editor_dispatcher.cpp" />
     <ClCompile Include="src\tools\editor\editor_main.cpp" />

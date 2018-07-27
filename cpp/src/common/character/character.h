@@ -1,5 +1,5 @@
 #pragma once
-#include "geometry.h"
+#include "vec.h"
 #include "util/packed_array.h"
 
 #define MAX_CHARACTER_COUNT 100

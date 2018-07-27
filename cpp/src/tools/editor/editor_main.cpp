@@ -5,6 +5,7 @@
 #include "editor_dispatcher.h"
 #include "editor_pathfind.h"
 #include "character/action/assignment_container.h"
+#include "editor_collisions.h"
 
 namespace editor
 {
@@ -18,6 +19,7 @@ namespace editor
 	bool moveSelected = false;
 	bool dispatcherSelected = true;
 	bool pathfindSelected = false;
+	bool collisionSelected = false;
 
 	void drawEditor(float deltaTime)
 	{
@@ -44,6 +46,11 @@ namespace editor
 			if (ImGui::BeginMenu("Pathfind"))
 			{
 				ImGui::MenuItem("Dijkstra", NULL, &pathfindSelected);
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Collision"))
+			{
+				ImGui::MenuItem("AABB vs AABB", NULL, &collisionSelected);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMainMenuBar();
@@ -76,6 +83,10 @@ namespace editor
 		if (pathfindSelected)
 		{
 			pathfind::drawDijkstraEditor();
+		}
+		if (collisionSelected)
+		{
+			drawCollisionEditor();
 		}
 	}
 }

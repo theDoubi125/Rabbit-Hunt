@@ -2,7 +2,7 @@
 
 #include <map>
 #include <SDL.h>
-#include "geometry.h"
+#include "vec.h"
 #define BUTTON_COUNT 3
 
 namespace input

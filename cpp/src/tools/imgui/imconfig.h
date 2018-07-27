@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 
 #pragma once
-#include "geometry.h"
+#include "vec.h"
 
 //---- Define assertion handler. Defaults to calling assert().
 //#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)

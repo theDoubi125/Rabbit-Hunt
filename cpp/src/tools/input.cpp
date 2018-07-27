@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include "input.h"
 #include "name.h"
-#include "geometry.h"
+#include "vec.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl_gl3.h"
 

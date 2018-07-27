@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geometry.h"
+#include "vec.h"
 
 #define MAX_LEVEL_SIZE 100
 

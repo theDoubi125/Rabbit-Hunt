@@ -37,14 +37,25 @@ namespace action
 			vec2 velocities[MAX_CHARACTER_COUNT];
 			parray<vec2, MAX_CHARACTER_COUNT> pos;
 			const assignmentContainer& baseAssignment = assignment.assignmentContainerData;
-			
-			for (int i = 0; i < baseAssignment.count; i++)
+
+			auto indexData = assignment.indexData;
+
+			pushAllocatorStack();
+
+			vec2* positions = mainAllocator->allocate<vec2>(indexData.characterCount);
+			characters.get(indexData.sortedCharacters, positions, indexData.characterCount);
+			struct TestData
 			{
-				actionData data = baseAssignment.actionData[i];
-				vec2 dirVec = toFloatVec(path::getDirectionVector(data.direction));
-				velocities[i] = dirVec * ((float)data.length / (float)data.duration);
+				character::handle character;
+				ivec2 cellToTest;
+			};
+			
+			for (int i = 0; i < indexData.characterCount; i++)
+			{
+				character::handle character = indexData.sortedCharacters[i];
+				vec2 velocity = indexData.globalVelocities[i];
 			}
-			characters.move(baseAssignment.characters, velocities, baseAssignment.count);
+			popAllocatorStack();
 		}
 	}
 
@@ -71,6 +82,7 @@ namespace action
 				indexData.characterCount++;
 				indexData.sortedCharacters[i] = character;
 				indexData.actionCountByCharacter[i] = 1;
+				indexData.globalVelocities[i] = velocity;
 			}
 			else if (character < indexData.sortedCharacters[i]) // case where the character is not present yet
 			{
@@ -104,8 +116,6 @@ namespace action
 				addToIndex(inputCharacters[i].character, inputCharacters[i].data);
 				
 				count++;
-
-				
 			}
 			input.clear();
 			// update the index

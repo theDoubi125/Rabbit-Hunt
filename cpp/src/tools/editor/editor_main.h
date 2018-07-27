@@ -12,4 +12,5 @@ namespace editor
 	extern bool moveSelected;
 	extern bool dispatcherSelected;
 	extern bool pathfindSelected;
+	extern bool collisionSelected;
 }		   
