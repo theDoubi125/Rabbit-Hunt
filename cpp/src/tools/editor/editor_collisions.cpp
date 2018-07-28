@@ -34,21 +34,31 @@ namespace editor
 		vec2 pos = window->DC.CursorPos;
 		drawList->AddRect(pos + A.min, pos + A.max, 0xffffff00);
 		drawList->AddRect(pos + B.min, pos + B.max, 0xffff00ff);
-		collision::BitArray flags = 0;
-		collision::testAABBCollisions(&A, &B, &flags, 1);
-		ImGui::Text("%d", flags);
+		collision::BitArray flags[] = { 0, 0 };
+		collision::testAABBCollisions(&A, &B, flags, 1);
+		ImGui::Text("%d", flags[0]);
 
 		static collision::Circle CA = { { 50, 50 }, 20 };
 		static collision::Circle CB = { { 60, 60 }, 10 };
-		ImGui::DragFloat2("CA : ", (float*)(&CA), 0.5f, 0, 100.0f);
-		ImGui::DragFloat3("CB : ", (float*)(&CB.pos), 0.5f, 0, 100.0f);
+
+		ImGui::DragFloat3("CA : ", (float*)(&CA), 0.5f, 0, 100.0f);
+		ImGui::DragFloat3("CB : ", (float*)(&CB), 0.5f, 0, 100.0f);
 
 		drawList->AddCircle(pos + CA.pos, CA.r, 0xffffff00);
 		drawList->AddCircle(pos + CB.pos, CB.r, 0xffff00ff);
-		flags = 0;
+		flags[0] = 0;
 
-		collision::testCircleCollisions(&CA, &CB, &flags, 1);
-		ImGui::Text("%d", flags);
+		collision::testCircleCollisions(&CA, &CB, flags, 1);
+		
+		ImGui::Text("%d", flags[0]);
+
+		collision::Circle Cs[] = { CA, CB };
+		collision::AABB AABBs[] = { A, B };
+
+		collision::testAABBCircleCollisions(AABBs, Cs, flags, 2);
+		
+		ImGui::Text("%d %d", flags[0], flags[1]);
+
 
 		ImGui::End();
 	}
