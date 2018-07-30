@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec.h"
+#include "util/buffer.h"
 
 namespace collision
 {
@@ -20,5 +21,5 @@ namespace collision
 	void testAABBCollisions(const AABB* firsts, const AABB* seconds, BitArray* outFlags, int count);
 	void testCircleCollisions(const Circle* firsts, const Circle* seconds, BitArray* outFlags, int count);
 	void testAABBCircleCollisions(const AABB* aabbs, const Circle* circles, BitArray* outFlags, int count);
-	void getCellsTouchingCircle(const Circle& circle, ivec2 outCells, int cellCount);
+	void getCellsTouchingCircle(const Circle& circle, buffer<ivec2> outCells);
 }

@@ -58,47 +58,65 @@ namespace collision
 				int index = j + i * BIT_ARRAY_SIZE;												//    6 | 7 | 8   
 				const AABB& box = aabbs[index];							   
 				const Circle& circle = circles[index];					                        
-				int quadrant = 0;										                        
-				if (circle.pos.x > box.max.x)
-					quadrant += 2;
-				else if(circle.pos.x > box.min.x)
-					quadrant += 1;
-				if (circle.pos.y > box.max.y)
-					quadrant += 6;
-				else if (circle.pos.y > box.min.y)
-					quadrant += 3;
+				int quadrant = 0;
+
+				quadrant += 2 * (circle.pos.x > box.max.x);
+				quadrant += 1 * (circle.pos.x <= box.max.x && circle.pos.x > box.min.x);
+				quadrant += 6 * (circle.pos.y > box.max.y);
+				quadrant += 3 * (circle.pos.y <= box.max.y && circle.pos.y > box.min.y);
 
 				vec2 corners[] = { box.min, {box.max.x, box.min.y}, vec2(), {box.min.x, box.max.y}, box.max };
 				vec2 centerToCorner = corners[quadrant / 2] - circle.pos;
 
-				switch (quadrant)
+				bool testByQuadrant[] =
 				{
-				case 0:
-				case 2:
-				case 6:
-				case 8:
-					// center of circle in a diagonal => test distance to closer corner
-					outFlags[i] |= ((centerToCorner.x * centerToCorner.x) + (centerToCorner.y * centerToCorner.y) < circle.r * circle.r) << j;
-					break;
-				case 1:
-					// center of circle aligned along x or y => test distance to closer edge
-					outFlags[i] |= (circle.pos.y + circle.r > box.min.y) << j;
-					break;													
-				case 3:														
-					outFlags[i] |= (circle.pos.x + circle.r > box.min.x) << j;
-					break;													
-				case 5:														
-					outFlags[i] |= (circle.pos.x - circle.r < box.max.x) << j;
-					break;													
-				case 7:														
-					outFlags[i] |= (circle.pos.y - circle.r < box.max.y) << j;
+					(centerToCorner.x * centerToCorner.x) + (centerToCorner.y * centerToCorner.y) < circle.r * circle.r,
+					circle.pos.y + circle.r > box.min.y,
+					(centerToCorner.x * centerToCorner.x) + (centerToCorner.y * centerToCorner.y) < circle.r * circle.r,
+					circle.pos.x + circle.r > box.min.x,
+					true,
+					circle.pos.x - circle.r < box.max.x,
+					(centerToCorner.x * centerToCorner.x) + (centerToCorner.y * centerToCorner.y) < circle.r * circle.r,
+					circle.pos.y - circle.r < box.max.y,
+					(centerToCorner.x * centerToCorner.x) + (centerToCorner.y * centerToCorner.y) < circle.r * circle.r
+				};
 
-					break;
-				case 4:
-					outFlags[i] |= 1 << j;
-					break;
-				}
+				
+				outFlags[i] |= testByQuadrant[quadrant] << j;
 			}
+		}
+	}
+
+	vec2 getClosestPointOfCell(const vec2& A, const ivec2& cell) // not centered cells => cell (0, 0) has min of (0f, 0f) and max (1f, 1f)
+	{
+		int quadrant = 0;
+		vec2 min = toFloatVec(cell);
+		vec2 max = toFloatVec(cell + ivec2(1, 1));
+		quadrant += 2 * (A.x > max.x);
+		quadrant += 1 * (A.x > min.x && A.x <= max.x);
+		quadrant += 6 * (A.y > max.y);
+		quadrant += 3 * (A.y > min.y&& A.y <= max.y);
+
+		vec2 closestPointByQuadrant[] =
+		{
+			vec2(0, 0),
+			vec2(A.x - (float)cell.x, 0),
+			vec2(1, 0),
+			vec2(0, A.y - (float)cell.y),
+			vec2(A.x - (float)cell.x, A.y - (float)cell.y),
+			vec2(1, A.y - (float)cell.y),
+			vec2(0, 1),
+			vec2(A.x - (float)cell.x, 1),
+			vec2(1, 1)
+		};
+		return min + closestPointByQuadrant[quadrant];
+	}
+
+	void getCellsTouchingCircle(const Circle& circle, ivec2 outCells, int cellCount)
+	{
+		for (int i = 0; i < (int)(circle.r + 1); i++)
+		{
+			
 		}
 	}
 }
