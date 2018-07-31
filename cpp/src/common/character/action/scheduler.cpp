@@ -24,13 +24,36 @@ namespace action
 			m_actionQueues[character.id].enqueue(action);
 		}
 
-		void manager::dequeueNextAction(const character::handle* characters, typedActionData* outActions, int count)
+		void manager::getCharactersExcept(const character::handle* exceptCharacters, character::handle* outCharacters, int exceptSize, int& outCharactersCount)
 		{
-			for (int i = 0; i < count; i++)
+			int exceptCursor = 0;
+			for (int i = 0; i < MAX_CHARACTER_COUNT; i++)
 			{
-				if(m_actionQueues[characters[i].id].size() > 0)
-					outActions[i] = m_actionQueues[characters[i].id].dequeue();
-				else outActions[i].action = action::type::NONE;
+				while (exceptCursor < exceptSize && exceptCharacters[exceptCursor].id < i)
+					exceptCursor++;
+				if (exceptCursor < exceptSize && exceptCharacters[exceptCursor].id == i)
+				{
+					exceptCursor++;
+					continue;
+				}
+				else if (m_actionQueues[i].size() > 0)
+				{
+					outCharacters[i].id = i;
+				}
+			}
+		}
+
+		void manager::dequeueNextAction(const character::handle* inCharacters, character::handle* outCharacters, typedActionData* outActions, int inCount, int& outCount)
+		{
+			int outCursor = 0;
+			for (int i = 0; i < inCount; i++)
+			{
+				if (m_actionQueues[inCharacters[i].id].size() > 0)
+				{
+					outCharacters[outCursor] = inCharacters[i];
+					outActions[outCursor] = m_actionQueues[inCharacters[i].id].dequeue();
+					outCount++;
+				}
 			}
 		}
 	}

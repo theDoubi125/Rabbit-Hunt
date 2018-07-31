@@ -16,6 +16,21 @@ namespace action
 
 	namespace dispatcher
 	{
+		namespace tables
+		{
+			struct BusyCharacters
+			{
+				character::handle characters[MAX_CHARACTER_COUNT];
+				int busyDurations[MAX_CHARACTER_COUNT];
+				int count = 0;
+			};
+
+			struct IdleCharacters
+			{
+				character::handle characters[MAX_CHARACTER_COUNT];
+				int count = 0;
+			};
+		}
 		class manager
 		{
 		public:
@@ -23,7 +38,8 @@ namespace action
 			void bindHandler(type actionType, buffer<assignedAction>& handlerInput);
 			void update(scheduler::manager& m_scheduler);
 
-			characterBuffer m_unassignedCharacters;
+			tables::BusyCharacters busyTable;
+			tables::IdleCharacters idleTable;
 
 		private:
 			buffer<assignedAction> m_actionHandlerInputs[type::LAST];

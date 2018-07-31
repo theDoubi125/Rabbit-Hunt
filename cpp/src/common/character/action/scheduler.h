@@ -10,7 +10,6 @@
 
 namespace action
 {
-
 	namespace scheduler
 	{
 		class manager
@@ -19,7 +18,8 @@ namespace action
 			void allocate(int size);
 			void addAction(character::handle character, typedActionData action);
 
-			void dequeueNextAction(const character::handle* characters, typedActionData* outActions, int count);
+			void dequeueNextAction(const character::handle* inCharacters, character::handle* outCharacters, typedActionData* outActions, int inCount, int& outCount);
+			void getCharactersExcept(const character::handle* exceptCharacters, character::handle* outCharacters, int exceptSize, int& outCharactersCount);
 
 		public:
 			queue<typedActionData> m_actionQueues[MAX_CHARACTER_COUNT];
