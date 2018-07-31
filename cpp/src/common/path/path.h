@@ -35,17 +35,59 @@ namespace path
 		return ivec2(0, 1);
 	}
 
-	inline action::direction getVectorDirection(const ivec2 direction)
+	inline action::direction getOppositeDirection(action::direction dir)
 	{
-		if (direction.x != 0 && direction.y != 0)
-			return action::direction::UNDEFINED;
-		if (direction.x > 0)
+		switch (dir)
+		{
+		case action::direction::UP:
+			return action::direction::DOWN;
+		case action::direction::DOWN:
+			return action::direction::UP;
+		case action::direction::LEFT:
 			return action::direction::RIGHT;
-		if (direction.x < 0)
+		case action::direction::RIGHT:
 			return action::direction::LEFT;
-		if (direction.y > 0)
+		}
+		return action::direction::UNDEFINED;
+	}
+
+
+	inline action::direction getVectorDirection(const ivec2& V)
+	{
+		if (V.x != 0 && V.y != 0)
+			return action::direction::UNDEFINED;
+		if (V.x > 0)
+			return action::direction::RIGHT;
+		if (V.x < 0)
+			return action::direction::LEFT;
+		if (V.y > 0)
 			return action::direction::DOWN;
 		return action::direction::UP;
+	}
+
+	inline void getVectorDirections(const vec2& V, action::direction* outDirections, int& outCount)
+	{
+		outCount = 0;
+		if (V.x > 0)
+		{
+			outDirections[outCount] = action::direction::RIGHT;
+			outCount++;
+		}
+		else if (V.x < 0)
+		{
+			outDirections[outCount] = action::direction::LEFT;
+			outCount++;
+		}
+		if (V.y > 0)
+		{
+			outDirections[outCount] = action::direction::DOWN;
+			outCount++;
+		}
+		else if (V.y < 0)
+		{
+			outDirections[outCount] = action::direction::UP;
+			outCount++;
+		}
 	}
 
 	path* allocatePaths(memory::allocator& allocator, int pathsCount, int maxStepsCount);

@@ -12,8 +12,8 @@ namespace action
 		{
 		public:
 			MoveAssignmentContainer();
-			void add(character::handle handle, int duration);
 			void handleInput();
+			void addAction(const character::handle& character, const actionData& action);
 			void update();
 
 			void addToIndex(const character::handle& character, const actionData& action);
@@ -37,7 +37,7 @@ namespace action
 	{
 		void move(const move::MoveAssignmentContainer& assignmentContainer, character::manager& characters);
 		void getCurrentVelocities(const move::MoveAssignmentContainer& assignment, vec2* outVelocities);
-		void handleWallCollisions(const move::MoveAssignmentContainer& assignmentContainer, character::manager& characters, const level::accessibilityMap& map);
+		void handleWallCollisions(move::MoveAssignmentContainer& assignmentContainer, character::manager& characters, const level::accessibilityMap& map);
 	}
 
 	

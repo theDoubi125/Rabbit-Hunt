@@ -49,7 +49,7 @@ namespace array
 	}
 
 	template<typename T>
-	inline int getIndexForSortInsert(T* indexArray, T toAdd, int& arraySize)
+	inline int getIndexForSortInsert(const T* indexArray, const T& toAdd, int& arraySize)
 	{
 		for (int i = 0; i < arraySize; i++)
 		{

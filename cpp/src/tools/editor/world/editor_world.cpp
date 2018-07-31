@@ -14,7 +14,7 @@ namespace editor
 {
 	namespace world
 	{
-		char* editorToolNames[] = { "Window", "Wall", "Path" };
+		char* editorToolNames[] = { "Window", "Wall", "Path", "Collision" };
 
 		ivec2 screenToWorld(const level::accessibilityMap& map, ivec2 pos, float cellSize)
 		{
@@ -68,6 +68,35 @@ namespace editor
 			}
 		}
 
+		void updateCollisionTool(editorData& data)
+		{
+			pushAllocatorStack();
+			buffer<ivec2> cells = mainAllocator->allocateBuffer<ivec2>(100);
+			collision::Circle& circle = data.selectedToolData.collision.circle;
+			collision::getCellsTouchingCircleWithDirection(circle, cells, data.selectedToolData.collision.movingDirection);
+
+			ImDrawList* drawList = ImGui::GetWindowDrawList();
+			ImVec2 windowPos = ImGui::GetWindowPos();
+			ImVec2 mousePos = ImGui::GetMousePos();
+
+			for (int i = 0; i < cells.size(); i++)
+			{
+				ivec2 pos = cells.m_data[i] * data.cellSize;
+				ivec2 max = pos + ivec2(data.cellSize, data.cellSize);
+				int color = 0xffff0000;
+
+				ImVec2 A, B;
+				A.x = pos.x + windowPos.x;
+				B.x = max.x + windowPos.x;
+				A.y = pos.y + windowPos.y;
+				B.y = max.y + windowPos.y;
+				color = 0x55ffffff;
+				drawList->AddRectFilled(A, B, color);
+			}
+			drawList->AddCircle(windowPos + (circle.pos - vec2(0, 0)) * (float)data.cellSize, circle.r * data.cellSize, 0xffffffff, 50);
+			popAllocatorStack();
+		}
+
 		void updateTool(editorData& data, const character::manager& characterManager, action::scheduler::manager& scheduler, level::accessibilityMap& map)
 		{
 			switch (data.selectedTool)
@@ -77,6 +106,9 @@ namespace editor
 				break;
 			case editorTool::Wall:
 				updateWallTool(map, data);
+				break;
+			case editorTool::Collision:
+				updateCollisionTool(data);
 				break;
 			}
 		}
@@ -91,6 +123,14 @@ namespace editor
 			ImGui::Checkbox("Add wall", &data.selectedToolData.wall.selectedTile);
 		}
 
+		void updateCollisionToolEditor(editorData& data)
+		{
+			ImGui::DragFloat2("Circle Center", (float*)(&data.selectedToolData.collision.circle.pos), 0.1f);
+			ImGui::DragFloat("Circle Radius", (float*)(&data.selectedToolData.collision.circle.r), 0.1f);
+
+			ImGui::DragFloat2("Moving Direction", (float*)(&data.selectedToolData.collision.movingDirection), 0.1f);
+		}
+
 		void drawToolEditor(editorData& data)
 		{
 			switch (data.selectedTool)
@@ -100,6 +140,9 @@ namespace editor
 				break;
 			case editorTool::Wall:
 				updateWallToolEditor(data);
+				break;
+			case editorTool::Collision:
+				updateCollisionToolEditor(data);
 				break;
 			}
 		}

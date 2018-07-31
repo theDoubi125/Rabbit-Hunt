@@ -3,6 +3,7 @@
 #include "character/character.h"
 #include "level.h"
 #include "character/action/scheduler.h"
+#include "collision.h"
 
 namespace editor
 {
@@ -18,11 +19,18 @@ namespace editor
 			bool selectedTile;
 		};
 
+		struct CollisionToolData
+		{
+			collision::Circle circle;
+			vec2 movingDirection;
+		};
+
 		enum class editorTool
 		{
 			Window,
 			Wall,
 			Path,
+			Collision,
 
 			Last
 		};
@@ -34,7 +42,7 @@ namespace editor
 			editorTool selectedTool = editorTool::Window;
 			int cellSize = 20;
 
-			struct toolData { pathToolData path; wallToolData wall; };
+			struct toolData { pathToolData path; wallToolData wall; CollisionToolData collision; };
 
 			toolData selectedToolData = {};
 		};

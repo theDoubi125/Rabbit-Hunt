@@ -1,6 +1,7 @@
 #include "collision.h"
 #include <climits>
 #include <cmath>
+#include <memory/allocator.h>
 
 namespace collision
 {
@@ -87,36 +88,95 @@ namespace collision
 		}
 	}
 
-	vec2 getClosestPointOfCell(const vec2& A, const ivec2& cell) // not centered cells => cell (0, 0) has min of (0f, 0f) and max (1f, 1f)
+	void getClosestPointsInCells(const vec2& point, const ivec2* cells, vec2 *outPoints, int count) // not centered cells => cell (0, 0) has min of (0f, 0f) and max (1f, 1f)
 	{
-		int quadrant = 0;
-		vec2 min = toFloatVec(cell);
-		vec2 max = toFloatVec(cell + ivec2(1, 1));
-		quadrant += 2 * (A.x > max.x);
-		quadrant += 1 * (A.x > min.x && A.x <= max.x);
-		quadrant += 6 * (A.y > max.y);
-		quadrant += 3 * (A.y > min.y&& A.y <= max.y);
-
-		vec2 closestPointByQuadrant[] =
+		for (int i = 0; i < count; i++)
 		{
-			vec2(0, 0),
-			vec2(A.x - (float)cell.x, 0),
-			vec2(1, 0),
-			vec2(0, A.y - (float)cell.y),
-			vec2(A.x - (float)cell.x, A.y - (float)cell.y),
-			vec2(1, A.y - (float)cell.y),
-			vec2(0, 1),
-			vec2(A.x - (float)cell.x, 1),
-			vec2(1, 1)
-		};
-		return min + closestPointByQuadrant[quadrant];
+			int quadrant = 0;
+			vec2 min = toFloatVec(cells[i]);
+			vec2 max = toFloatVec(cells[i] + ivec2(1, 1));
+			quadrant += 2 * (point.x > max.x);									//	  0 | 1 | 2
+			quadrant += 1 * (point.x > min.x && point.x <= max.x);				//	----|---|----
+			quadrant += 6 * (point.y > max.y);									//	  3 | 4 | 5
+			quadrant += 3 * (point.y > min.y&& point.y <= max.y);				//	----|---|----
+																				//    6 | 7 | 8  
+			vec2 closestPointByQuadrant[] =
+			{
+				vec2(0, 0),
+				vec2(point.x - (float)cells[i].x, 0),
+				vec2(1, 0),
+				vec2(0, point.y - (float)cells[i].y),
+				vec2(point.x - (float)cells[i].x, point.y - (float)cells[i].y),
+				vec2(1, point.y - (float)cells[i].y),
+				vec2(0, 1),
+				vec2(point.x - (float)cells[i].x, 1),
+				vec2(1, 1)
+			};
+			outPoints[i] = min + closestPointByQuadrant[quadrant];
+		}
 	}
 
-	void getCellsTouchingCircle(const Circle& circle, ivec2 outCells, int cellCount)
+	void getCellsTouchingCircle(const Circle& circle, buffer<ivec2>& outCells)
 	{
-		for (int i = 0; i < (int)(circle.r + 1); i++)
+		using namespace memory::util;
+		// go through a square of 2r * 2r cells and get the ones touching the circle
+		pushAllocatorStack();
+
+		int cellsCount = (circle.r + 2) * (circle.r + 2) * 4;
+		buffer<ivec2> cells = mainAllocator->allocateBuffer<ivec2>(cellsCount);
+		vec2* closestPoints = mainAllocator->allocate<vec2>(cellsCount);
+		float* distances = mainAllocator->allocate<float>(cellsCount);
+
+		for (int i = 0; i < (int)(circle.r + 2) * 2; i++)
 		{
-			
+			for (int j = 0; j < (int)(circle.r + 2) * 2; j++)
+			{
+				cells.add(toIntVec(circle.pos - vec2(circle.r, circle.r)) + ivec2(i, j));
+			}
 		}
+
+		getClosestPointsInCells(circle.pos, cells.m_data, closestPoints, cellsCount);
+
+		for (int i = 0; i < cells.size(); i++)
+		{
+			vec2 vecToClosest = closestPoints[i] - circle.pos;
+			distances[i] = vecToClosest.sizeSquared();
+			if (distances[i] < circle.r * circle.r)
+				outCells.add(cells.m_data[i]);
+		}
+
+		popAllocatorStack();
+	}
+
+	void getCellsTouchingCircleWithDirection(const Circle& circle, buffer<ivec2>& outCells, const vec2& direction)
+	{
+		using namespace memory::util;
+		// go through a square of 2r * 2r cells and get the ones touching the circle
+		pushAllocatorStack();
+
+		int cellsCount = (circle.r + 2) * (circle.r + 2) * 4;
+		buffer<ivec2> cells = mainAllocator->allocateBuffer<ivec2>(cellsCount);
+		vec2* closestPoints = mainAllocator->allocate<vec2>(cellsCount);
+		float* distances = mainAllocator->allocate<float>(cellsCount);
+
+		for (int i = 0; i < (int)(circle.r + 2) * 2; i++)
+		{
+			for (int j = 0; j < (int)(circle.r + 2) * 2; j++)
+			{
+				cells.add(toIntVec(circle.pos - vec2(circle.r, circle.r)) + ivec2(i, j));
+			}
+		}
+
+		getClosestPointsInCells(circle.pos, cells.m_data, closestPoints, cellsCount);
+
+		for (int i = 0; i < cells.size(); i++)
+		{
+			vec2 vecToClosest = closestPoints[i] - circle.pos;
+			distances[i] = vecToClosest.sizeSquared();
+			if (distances[i] < circle.r * circle.r && vecToClosest * direction > 0)
+				outCells.add(cells.m_data[i]);
+		}
+
+		popAllocatorStack();
 	}
 }

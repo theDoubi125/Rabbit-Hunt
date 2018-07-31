@@ -38,7 +38,7 @@ public:
 
 	void clear()
 	{
-		m_cursor = 0;
+		*m_cursor = 0;
 	}
 
 	T* m_data;

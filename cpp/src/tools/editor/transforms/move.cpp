@@ -2,6 +2,7 @@
 #include "path/path.h"
 #include "memory/allocator.h"
 #include "util/sorted_array.h"
+#include "collision.h"
 
 using namespace memory::util;
 
@@ -32,7 +33,7 @@ namespace action
 			}
 		}
 
-		void handleWallCollisions(const move::MoveAssignmentContainer& assignment, character::manager& characters, const level::accessibilityMap& map)
+		void handleWallCollisions(move::MoveAssignmentContainer& assignment, character::manager& characters, const level::accessibilityMap& map)
 		{
 			vec2 velocities[MAX_CHARACTER_COUNT];
 			parray<vec2, MAX_CHARACTER_COUNT> pos;
@@ -50,10 +51,39 @@ namespace action
 				ivec2 cellToTest;
 			};
 			
+			buffer<ivec2> cells = mainAllocator->allocateBuffer<ivec2>(30);
 			for (int i = 0; i < indexData.characterCount; i++)
 			{
 				character::handle character = indexData.sortedCharacters[i];
 				vec2 velocity = indexData.globalVelocities[i];
+
+				collision::Circle circle = { positions[i], 0.9f };
+
+				action::direction directions[2];
+				int dirCount = 0;
+
+				path::getVectorDirections(velocity, directions, dirCount);
+
+				for (int j = 0; j < dirCount; j++)
+				{
+					cells.clear();
+					ivec2 dirVec = path::getDirectionVector(directions[j]);
+					vec2 projectedVelocity = vec2(velocity.x * (float)dirVec.x, velocity.y * (float)dirVec.y);
+					collision::getCellsTouchingCircleWithDirection(circle, cells, projectedVelocity);
+
+					for (int k = 0; k < cells.size(); k++)
+					{
+						if (!map.isAccessible(cells.m_data[k])) // collision detection with map walls
+						{
+							actionData pushData = { (int)(1.0f / projectedVelocity.size()), 1,  path::getOppositeDirection(directions[j]) };
+							assignment.addAction(character, pushData);
+
+							vec2 replacementVec = vec2(-projectedVelocity.x, -projectedVelocity.y);
+							characters.move(&character, &replacementVec, 1);
+							break;
+						}
+					}
+				}
 			}
 			popAllocatorStack();
 		}
@@ -120,6 +150,23 @@ namespace action
 			input.clear();
 			// update the index
 			
+		}
+
+		void MoveAssignmentContainer::addAction(const character::handle& character, const actionData& action)
+		{
+			auto& input = assignmentContainerData.input;
+			auto& durations = assignmentContainerData.durations;
+			auto& characters = assignmentContainerData.characters;
+			auto& actionData = assignmentContainerData.actionData;
+			auto& count = assignmentContainerData.count;
+			int insertIndex = array::getIndexForSortInsert(durations, -action.duration, count);
+			array::insert(durations, insertIndex, -action.duration, count);
+			array::insert(characters, insertIndex, character, count);
+			array::insert(actionData, insertIndex, action, count);
+
+			addToIndex(character, action);
+
+			count++;
 		}
 
 		void MoveAssignmentContainer::update()

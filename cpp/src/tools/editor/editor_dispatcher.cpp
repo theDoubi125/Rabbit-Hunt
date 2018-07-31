@@ -151,9 +151,11 @@ namespace editor
 				movingManager.handleInput();
 				noneManager.handleInput();
 				transform::move(movingManager, characterManager);
+				transform::handleWallCollisions(movingManager, characterManager, map);
 				idleManager.update();
 				movingManager.update();
 				noneManager.update();
+
 			}
 
 
