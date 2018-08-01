@@ -38,7 +38,8 @@ namespace action
 				}
 				else if (m_actionQueues[i].size() > 0)
 				{
-					outCharacters[i].id = i;
+					outCharacters[outCharactersCount].id = i;
+					outCharactersCount++;
 				}
 			}
 		}

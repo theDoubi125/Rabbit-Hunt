@@ -42,9 +42,6 @@ namespace editor
 
 			if (!initialized)
 			{
-				idleManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
-				movingManager.assignmentContainerData.output = dispatcherInstance.m_unassignedCharacters.getRef();
-				noneManager.output = dispatcherInstance.m_unassignedCharacters.getRef();
 				schedulerInstance.allocate(100);
 				dispatcherInstance.bindHandler(type::IDLE, idleManager.input.getRef());
 				dispatcherInstance.bindHandler(type::MOVING, movingManager.assignmentContainerData.input.getRef());
@@ -132,16 +129,6 @@ namespace editor
 						ImGui::TreePop();
 					}
 				}
-			}
-
-			if (Button("Add unused Character"))
-				dispatcherInstance.m_unassignedCharacters.add(selectedCharacter);
-
-			const character::handle* unassignedCharactersBuffer = dispatcherInstance.m_unassignedCharacters.getData();
-			for (int i = 0; i < dispatcherInstance.m_unassignedCharacters.size(); i++)
-			{
-				Text("%d", unassignedCharactersBuffer[i]);
-				SameLine();
 			}
 
 			if (Button("Update"))

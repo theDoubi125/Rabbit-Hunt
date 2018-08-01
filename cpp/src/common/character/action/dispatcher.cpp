@@ -1,4 +1,5 @@
 #include "dispatcher.h"
+#include "util/sorted_array.h"
 
 namespace action
 {
@@ -32,7 +33,19 @@ namespace action
 			{
 				type actionType = nextActionsBuffer[i].action;
 				m_actionHandlerInputs[actionType].add({ charactersWithAction[i], nextActionsBuffer[i].data });
+				int index = array::getIndexForSortInsert(busyTable.busyDurations, -nextActionsBuffer[i].data.duration, busyTable.count);
+				// sort by -duration to have lowest durations on the right
+				array::insert(busyTable.busyDurations, index, -nextActionsBuffer[i].data.duration, busyTable.count);
+				array::insert(busyTable.characters, index, charactersWithAction[i], busyTable.count);
+				busyTable.count++;
 			}
+
+			for (int i = 0; i < busyTable.count; i++)
+			{
+				busyTable.busyDurations[i]++;
+			}
+
+			for (; busyTable.count > 0 && busyTable.busyDurations[busyTable.count - 1] >= 0; busyTable.count--); // remove 0s
 		}
 	}
 }
