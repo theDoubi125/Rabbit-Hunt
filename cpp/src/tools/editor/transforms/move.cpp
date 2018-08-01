@@ -57,7 +57,7 @@ namespace action
 				character::handle character = indexData.sortedCharacters[i];
 				vec2 velocity = indexData.globalVelocities[i];
 
-				collision::Circle circle = { positions[i], 0.9f };
+				collision::Circle circle = { positions[i] + vec2(0.5f, 0.5f), 0.4f };
 
 				action::direction directions[2];
 				int dirCount = 0;
@@ -68,8 +68,8 @@ namespace action
 				{
 					cells.clear();
 					ivec2 dirVec = path::getDirectionVector(directions[j]);
-					vec2 projectedVelocity = vec2(velocity.x * (float)dirVec.x, velocity.y * (float)dirVec.y);
-					collision::getCellsTouchingCircleWithDirection(circle, cells, projectedVelocity);
+					vec2 projectedVelocity = vec2(velocity.x * (float)abs(dirVec.x), velocity.y * (float)abs(dirVec.y));
+					collision::getCellsTouchingCircleWithDirection(circle, cells, vec2(projectedVelocity.x, projectedVelocity.y));
 
 					for (int k = 0; k < cells.size(); k++)
 					{
