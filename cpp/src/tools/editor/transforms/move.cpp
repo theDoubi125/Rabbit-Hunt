@@ -87,6 +87,32 @@ namespace action
 			}
 			popAllocatorStack();
 		}
+
+		void handleCharacterCollisions(move::MoveAssignmentContainer& assignmentContainer, character::manager& characters)
+		{
+			pushAllocatorStack();
+			character::handle* handles = mainAllocator->allocate<character::handle>(characters.count());
+			vec2* velocities = mainAllocator->allocate<vec2>(characters.count());
+			getCurrentVelocities(assignmentContainer, velocities);
+			for (int i = 0; i < characters.count(); i++)
+			{
+				for (int j = i + 1; j < characters.count(); j++)
+				{
+					vec2 A = characters.get(handles[i]);
+					vec2 B = characters.get(handles[j]);
+					vec2 AB = B - A;
+
+					vec2 v1 = velocities[i];
+					vec2 v2 = velocities[j];
+
+					if ((v1 + v2) * AB > 0)
+					{
+
+					}
+				}
+			}
+			popAllocatorStack();
+		}
 	}
 
 	namespace move

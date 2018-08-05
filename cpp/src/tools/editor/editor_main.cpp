@@ -17,9 +17,9 @@ namespace editor
 	bool idleSelected = false;
 	bool demoWindowSelected = false;
 	bool moveSelected = false;
-	bool dispatcherSelected = true;
+	bool dispatcherSelected = false;
 	bool pathfindSelected = false;
-	bool collisionSelected = false;
+	bool collisionSelected = true;
 
 	void drawEditor(float deltaTime)
 	{
