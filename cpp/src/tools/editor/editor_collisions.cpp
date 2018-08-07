@@ -20,8 +20,12 @@ namespace editor
 		static collision::Circle A = { vec2(50, 50), 30 };
 		static collision::Circle B = { vec2(70, 70), 30 };
 
+		vec2 n = (B.pos - A.pos).normalized();
+
 		static vec2 velocityA = { 0, 0 };
 		static vec2 velocityB = { 0, 0 };
+
+		static float wA = 1, wB = 1;
 
 		static float cellSize = 50;
 
@@ -29,8 +33,10 @@ namespace editor
 
 		ImGui::DragFloat2("A pos : ", (float*)(&A.pos));
 		ImGui::DragFloat2("B pos : ", (float*)(&B.pos));
-		ImGui::DragFloat("A radius : ", (float*)(&A.r), 0, 0, 100.0f);
-		ImGui::DragFloat("B radius : ", (float*)(&B.r), 0, 0, 100.0f);
+		ImGui::DragFloat("A radius : ", (float*)(&A.r), 0, 1, 100.0f);
+		ImGui::DragFloat("B radius : ", (float*)(&B.r), 0, 1, 100.0f);
+		ImGui::SliderFloat("A weight : ", (float*)(&wA), 1, 100.0f);
+		ImGui::SliderFloat("B weight : ", (float*)(&wB), 1, 100.0f);
 
 
 		ImGui::DragFloat2("A velocity : ", (float*)(&velocityA), 0.1f, -50, 50);
@@ -54,20 +60,24 @@ namespace editor
 		drawList->AddLine(pos + A.pos, pos + A.pos + velocityA * cellSize, ImColor(255, 0, 0));
 		drawList->AddLine(pos + B.pos, pos + B.pos + velocityB * cellSize, ImColor(0, 255, 0));
 
-		drawList->AddLine(pos + A.pos, pos + A.pos + vec2(velocityA.x * cellSize, 0), ImColor(255, 0, 0, 100), 2);
-		drawList->AddLine(pos + A.pos, pos + A.pos + vec2(0, velocityA.y * cellSize), ImColor(255, 0, 0, 100), 2);
-		drawList->AddLine(pos + B.pos, pos + B.pos + vec2(velocityB.x * cellSize, 0), ImColor(0, 255, 0, 100), 2);
-		drawList->AddLine(pos + B.pos, pos + B.pos + vec2(0, velocityB.y * cellSize), ImColor(0, 255, 0, 100), 2);
+		vec2 projVA = n * (n * velocityA);
+		vec2 projVB = n * (n * velocityB);
 
-		vec2 C = pos + (A.pos + B.pos) / 2;
-		float utilVelocityAx = velocityA.x * (B.pos.x - A.pos.x);
-		float utilVelocityAy = velocityA.y * (B.pos.y - A.pos.y);
-		float utilVelocityBx = velocityB.x * -(B.pos.x - A.pos.x);
-		float utilVelocityBy = velocityB.y * -(B.pos.y - A.pos.y);
+		drawList->AddLine(pos + A.pos, pos + A.pos + projVA * cellSize, ImColor(255, 0, 0, 100), 2);
+		drawList->AddLine(pos + A.pos + velocityA * cellSize, pos + A.pos + projVA * cellSize, ImColor(255, 0, 0, 100), 2);
+		drawList->AddLine(pos + B.pos, pos + B.pos + projVB * cellSize, ImColor(0, 255, 0, 100), 2);
+		drawList->AddLine(pos + B.pos + velocityB * cellSize, pos + B.pos + projVB * cellSize, ImColor(0, 255, 0, 100), 2);
 
-		drawList->AddLine(C, C + vec2(utilVelocityAx - utilVelocityBx, utilVelocityAy - utilVelocityBy), ImColor(255, 255, 0, 100), 3);
+		vec2 resultVelocity = (wA * projVA + wB * projVB) / (wA + wB);
 
+		if ((projVA - projVB) * n > 0)
+		{
+			vec2 C = pos + (A.pos + B.pos) / 2;
+			drawList->AddLine(C, C + resultVelocity * cellSize, ImColor(0, 255, 255, 255), 3);
+		}
 		ImGui::EndChild();
+
+		ImGui::Text("Test : %f", (projVA - projVB) * n);
 	}
 
 	void drawCollisionDetectEditor()
